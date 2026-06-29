@@ -10,11 +10,16 @@ import { usePathname, useRouter } from '~/lib/i18n/navigation'
 
 const locales = WEBSITE_CONFIG.i18n.locales
 
-export function LanguageSwitch() {
+interface LanguageSwitchProps {
+  variant?: 'default' | 'frontend'
+}
+
+export function LanguageSwitch({ variant = 'default' }: LanguageSwitchProps) {
   const t = useTypedTranslations()
   const router = useRouter()
   const pathname = usePathname()
   const currentLocale = useLocale()
+  const isFrontend = variant === 'frontend'
 
   const handleChange = useCallback((localeKey: string) => {
     const search = window.location.search
@@ -25,8 +30,8 @@ export function LanguageSwitch() {
 
   return (
     <Popover>
-      <Button className="bg-default-hover h-11" variant="tertiary">
-        <Avatar className="size-6" size="sm">
+      <Button className={isFrontend ? 'h-10 rounded-full border border-white/20 bg-white/8 px-3 text-white shadow-none backdrop-blur-xl transition hover:bg-white/12' : 'bg-default-hover h-11'} variant={isFrontend ? 'ghost' : 'tertiary'}>
+        <Avatar className={isFrontend ? 'size-5' : 'size-6'} size="sm">
           <Avatar.Image
             alt={`${locales[currentLocale]?.name || currentLocale} flag`}
             className="rounded-none size-full object-cover"
@@ -36,11 +41,11 @@ export function LanguageSwitch() {
             <Skeleton className="size-6 rounded-full" />
           </Avatar.Fallback>
         </Avatar>
-        <span className="hidden md:block">{locales[currentLocale]?.name}</span>
-        <ChevronDown />
+        <span className={isFrontend ? 'hidden text-sm font-medium md:block' : 'hidden md:block'}>{locales[currentLocale]?.name}</span>
+        <ChevronDown className={isFrontend ? 'size-4 opacity-70' : undefined} />
       </Button>
       <Popover.Content>
-        <Popover.Dialog className="w-48">
+        <Popover.Dialog className={isFrontend ? 'w-48 border border-white/20 bg-black/85 text-white backdrop-blur-xl' : 'w-48'}>
           <Popover.Arrow />
           <Popover.Heading>{t('common.switcher.language.title')}</Popover.Heading>
           <ListBox

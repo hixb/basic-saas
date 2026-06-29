@@ -5,6 +5,7 @@ import { envSchema } from './env.schema'
  */
 export const env = envSchema.parse({
   DATABASE_URL: process.env.DATABASE_URL,
+  ENABLE_BEHAVIOR_ANALYSIS: process.env.ENABLE_BEHAVIOR_ANALYSIS,
   JWT_SECRET: process.env.JWT_SECRET,
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID,

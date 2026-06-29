@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
       { hostname: 'picsum.photos' },
       { hostname: '*.r2.dev' },
       { hostname: 'placehold.co' },
+      { hostname: 'images.unsplash.com' },
+      { hostname: 'motionsites.ai' },
     ],
   },
   compiler: {

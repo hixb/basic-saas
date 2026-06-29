@@ -5,6 +5,7 @@ import { z } from 'zod'
  */
 export const envSchema = z.object({
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
+  ENABLE_BEHAVIOR_ANALYSIS: z.enum(['true', 'false']).default('true').transform(value => value === 'true'),
   JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
   NEXT_PUBLIC_APP_URL: z.string().url().default('http://localhost:4325'),
   R2_ACCESS_KEY_ID: z.string().min(1, 'R2_ACCESS_KEY_ID is required'),

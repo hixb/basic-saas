@@ -1,4 +1,5 @@
 import type { NextRequest } from 'next/server'
+import { env } from '~/config/env'
 import { badRequest, calculatePagination, created, deleted, fail, notFound, ok, paginated } from '~/server/core/response/response.helper'
 import { AnalyticsRepository } from '~/server/infrastructure/database/repositories/analytics.repository'
 import { fetchGeoByIp, getClientIp } from '~/server/infrastructure/geo/ip-geo.service'
@@ -114,6 +115,16 @@ async function readReplayChunk(chunk: { chunkIndex: number, r2Key: string }): Pr
  * Return analytics collection settings for the browser SDK.
  */
 export async function handleGetAnalyticsSettings() {
+  if (!env.ENABLE_BEHAVIOR_ANALYSIS) {
+    return ok({
+      enabled: false,
+      replayEnabled: false,
+      blockedPaths: [],
+      maskTextSelectors: [],
+      blockSelectors: [],
+    })
+  }
+
   const settings = await analyticsRepository.getSettings()
   const enabled = settings.enabled && shouldCollect(settings.sampleRate)
   const replayEnabled = enabled && settings.replayEnabled && shouldCollect(settings.replaySampleRate)
@@ -131,6 +142,9 @@ export async function handleGetAnalyticsSettings() {
  * Create or refresh an analytics session.
  */
 export async function handleCreateAnalyticsSession(request: NextRequest) {
+  if (!env.ENABLE_BEHAVIOR_ANALYSIS)
+    return ok(null)
+
   const body = await request.json()
   const validation = analyticsSessionSchema.safeParse(body)
 
@@ -176,6 +190,9 @@ export async function handleCreateAnalyticsSession(request: NextRequest) {
  * Store analytics event batch.
  */
 export async function handleCreateAnalyticsEvents(request: NextRequest) {
+  if (!env.ENABLE_BEHAVIOR_ANALYSIS)
+    return ok({ accepted: 0 })
+
   const body = await request.json()
   const validation = analyticsEventsBatchSchema.safeParse(body)
 
@@ -209,6 +226,9 @@ export async function handleCreateAnalyticsEvents(request: NextRequest) {
  * Generate an R2 signed URL for a replay chunk upload.
  */
 export async function handleSignAnalyticsReplayUpload(request: NextRequest) {
+  if (!env.ENABLE_BEHAVIOR_ANALYSIS)
+    return badRequest('Analytics collection is disabled')
+
   const body = await request.json()
   const validation = analyticsReplaySignSchema.safeParse(body)
 
@@ -237,6 +257,9 @@ export async function handleSignAnalyticsReplayUpload(request: NextRequest) {
  * Commit uploaded replay chunk metadata after R2 upload succeeds.
  */
 export async function handleCommitAnalyticsReplayUpload(request: NextRequest) {
+  if (!env.ENABLE_BEHAVIOR_ANALYSIS)
+    return ok(null)
+
   const body = await request.json()
   const validation = analyticsReplayCommitSchema.safeParse(body)
 
@@ -267,6 +290,9 @@ export async function handleCommitAnalyticsReplayUpload(request: NextRequest) {
  * Upload replay chunk through the application server to avoid browser R2 CORS.
  */
 export async function handleUploadAnalyticsReplayChunk(request: NextRequest) {
+  if (!env.ENABLE_BEHAVIOR_ANALYSIS)
+    return ok(null)
+
   const body = await request.json()
   const validation = analyticsReplayUploadSchema.safeParse(body)
 
@@ -307,6 +333,9 @@ export async function handleUploadAnalyticsReplayChunk(request: NextRequest) {
  * Mark a session as finished.
  */
 export async function handleFinishAnalyticsSession(request: NextRequest) {
+  if (!env.ENABLE_BEHAVIOR_ANALYSIS)
+    return ok({ finished: false })
+
   const body = await request.json()
   const validation = analyticsFinishSessionSchema.safeParse(body)
 

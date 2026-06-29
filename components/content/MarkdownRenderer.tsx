@@ -8,11 +8,11 @@ interface MarkdownRendererProps {
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
-    <div className="space-y-6 text-[17px] leading-8 text-[#39342e]">
+    <div className="space-y-6 text-[17px] leading-8">
       <ReactMarkdown
         components={{
           a: ({ children, ...props }) => (
-            <a className="font-semibold text-[#b8462f] underline-offset-4 hover:underline" rel="noreferrer" target="_blank" {...props}>
+            <a className="font-semibold underline-offset-4 hover:underline" rel="noreferrer" target="_blank" {...props}>
               {children}
             </a>
           ),
@@ -24,9 +24,9 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               {children}
             </video>
           ),
-          h1: ({ children }) => <h2 className="font-serif text-4xl leading-tight text-[#28231d]">{children}</h2>,
-          h2: ({ children }) => <h2 className="font-serif text-3xl leading-tight text-[#28231d]">{children}</h2>,
-          h3: ({ children }) => <h3 className="font-serif text-2xl leading-tight text-[#28231d]">{children}</h3>,
+          h1: ({ children }) => <h2 className="font-serif text-4xl leading-tight">{children}</h2>,
+          h2: ({ children }) => <h2 className="font-serif text-3xl leading-tight">{children}</h2>,
+          h3: ({ children }) => <h3 className="font-serif text-2xl leading-tight">{children}</h3>,
           li: ({ children }) => <li className="ml-5 list-disc pl-1">{children}</li>,
           p: ({ children }) => <p className="max-w-3xl">{children}</p>,
           table: ({ children }) => <div className="overflow-x-auto"><table className="min-w-full border-collapse text-sm">{children}</table></div>,
