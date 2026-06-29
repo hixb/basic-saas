@@ -1,0 +1,30 @@
+{
+  "common.json::hello": {
+    "sourceHash": "185f8db32271fe25f561a6fc938b2e264306ec304eda518007d1764826381969",
+    "updatedAt": "2025-11-14T09:50:19.574Z"
+  },
+  "common.json::name": {
+    "sourceHash": "833583c574131c1ec81313e982643b9f5fba312df50f7c97db0572ad1ce5a929",
+    "updatedAt": "2025-11-14T09:50:19.575Z"
+  },
+  "common.json::credits": {
+    "sourceHash": "699c5037cec649dbc2be8c48cc95e421720a658e57604c1d1c4fa40cfd70fcba",
+    "updatedAt": "2025-11-14T09:50:19.575Z"
+  },
+  "common.json::world": {
+    "sourceHash": "87a10e1b5a72e8973473063a7f6821fcf9820660303a0013b6cc1c688f513b98",
+    "updatedAt": "2025-11-16T02:50:14.736Z"
+  },
+  "common.json::word": {
+    "sourceHash": "87089e1691fc09aa00bd796bbf760b646efb1d4ae868ff226344ae88d3b09c3b",
+    "updatedAt": "2025-11-21T03:13:02.060Z"
+  },
+  "common.json::style": {
+    "sourceHash": "7e744141b40ea5501412e42c8b40fd0b05f1608aa2e4073944ccccbd82f24ee8",
+    "updatedAt": "2025-11-21T03:15:23.584Z"
+  },
+  "common.json::dialog": {
+    "sourceHash": "69b51517d04bcfedc122b1ec4e02d8bf21a0137df16babe884974a4f88de8cbf",
+    "updatedAt": "2025-11-21T03:17:50.726Z"
+  }
+}

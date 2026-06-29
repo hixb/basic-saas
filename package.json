@@ -1,0 +1,70 @@
+{
+  "name": "saas-template",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=20.9.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "tsx scripts/watch-translations.ts & next dev --turbopack -p 4325",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "gen:i18n": "tsx scripts/generate-translation-types.ts",
+    "gen:i18n:watch": "tsx scripts/watch-translations.ts",
+    "translate": "tsx scripts/auto-translate.ts"
+  },
+  "dependencies": {
+    "@heroui/react": "3.0.1",
+    "@heroui/styles": "3.0.1",
+    "@hookform/resolvers": "^5.2.2",
+    "bcryptjs": "^3.0.3",
+    "clsx": "^2.1.1",
+    "date-fns-tz": "^3.2.0",
+    "drizzle-orm": "^0.45.0",
+    "framer-motion": "^12.23.24",
+    "jsonwebtoken": "^9.0.3",
+    "lucide-react": "^1.0.0",
+    "next": "16.2.1",
+    "next-intl": "^4.5.1",
+    "next-themes": "^0.4.6",
+    "nextjs-toploader": "^3.9.17",
+    "pg": "^8.16.3",
+    "postgres": "^3.4.8",
+    "qrcode.react": "^4.2.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-hook-form": "^7.68.0",
+    "recharts": "^3.5.0",
+    "tailwind-merge": "^3.4.0",
+    "vectify": "^2.0.2",
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^7.0.0",
+    "@eslint-react/eslint-plugin": "^3.0.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.0.0",
+    "@types/pg": "^8.15.6",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.7",
+    "eslint": "^10.0.0",
+    "eslint-config-next": "16.2.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4",
+    "tsx": "^4.20.6",
+    "typescript": "^6.0.0"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
+  }
+}
