@@ -7,6 +7,7 @@ import type {
   TranslationKeys,
 } from '~/types/translation-keys'
 import { useTranslations as useNextIntlTranslations } from 'next-intl'
+import { useMemo } from 'react'
 
 export function useTypedTranslations<N extends Namespace>(namespace: N): {
   <K extends TranslationKeys[N]>(
@@ -41,13 +42,15 @@ export function useTypedTranslations(): {
 export function useTypedTranslations<N extends Namespace>(namespace?: N) {
   const t = useNextIntlTranslations(namespace as any)
 
-  const translate = (key: any, ...args: any[]): string => {
-    return t(key, args[0])
-  }
+  return useMemo(() => {
+    const translate = (key: any, ...args: any[]): string => {
+      return t(key, args[0])
+    }
 
-  translate.rich = (key: any, ...args: any[]): ReactNode => {
-    return t.rich(key, args[0])
-  }
+    translate.rich = (key: any, ...args: any[]): ReactNode => {
+      return t.rich(key, args[0])
+    }
 
-  return translate
+    return translate
+  }, [t])
 }
