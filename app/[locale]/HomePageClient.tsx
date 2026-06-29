@@ -180,7 +180,6 @@ export function HomePageClient({ materials }: HomePageClientProps) {
           loop
           muted
           playsInline
-          poster="/images/hero_bg.jpeg"
         >
           <source src={heroVideoUrl} type="video/mp4" />
         </video>

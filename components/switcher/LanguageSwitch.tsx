@@ -45,7 +45,7 @@ export function LanguageSwitch({ variant = 'default' }: LanguageSwitchProps) {
         <ChevronDown className={isFrontend ? 'size-4 opacity-70' : undefined} />
       </Button>
       <Popover.Content>
-        <Popover.Dialog className={isFrontend ? 'w-48 border border-white/20 bg-black/85 text-white backdrop-blur-xl' : 'w-48'}>
+        <Popover.Dialog className="w-48">
           <Popover.Arrow />
           <Popover.Heading>{t('common.switcher.language.title')}</Popover.Heading>
           <ListBox
