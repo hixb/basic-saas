@@ -149,7 +149,20 @@ export function requester(options: FetchOptions = {}): FetchClient {
     body?: B,
     usePrefix = true,
     timeout?: number,
-  ) => request<T>(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: body == null ? undefined : JSON.stringify(body) }, usePrefix, timeout)
+  ) => {
+    const isFormData = typeof FormData !== 'undefined' && body instanceof FormData
+
+    return request<T>(
+      url,
+      {
+        method: 'POST',
+        headers: isFormData ? undefined : { 'Content-Type': 'application/json' },
+        body: body == null ? undefined : isFormData ? body : JSON.stringify(body),
+      },
+      usePrefix,
+      timeout,
+    )
+  }
 
   const put = <T, B = unknown>(
     url: string,

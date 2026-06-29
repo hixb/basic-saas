@@ -5,6 +5,7 @@ import type { CrudTableHandle, ListResult, UseCrudTableConfig } from '~/componen
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react'
 import { Popup } from '~/context/usePopupContext'
+import { ensureApiSuccess } from '~/utils/api-response-error'
 
 type Status = 'idle' | 'loading' | 'error'
 
@@ -324,11 +325,11 @@ export function useCrudTable<T, CreateInput = unknown, UpdateInput = unknown>(
 
   const handleFormSubmit = useCallback(async (data: CreateInput | UpdateInput) => {
     if (state.formMode === 'create') {
-      await operationsRef.current.create?.(data as CreateInput)
+      ensureApiSuccess(await operationsRef.current.create?.(data as CreateInput))
     }
     else if (state.editingRow != null) {
       const id = getRowId(state.editingRow)
-      await operationsRef.current.update?.(id, data as UpdateInput)
+      ensureApiSuccess(await operationsRef.current.update?.(id, data as UpdateInput))
     }
 
     fetchData()

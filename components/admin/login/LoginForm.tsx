@@ -5,6 +5,8 @@ import { Button, Checkbox, FieldError, Form, InputGroup, Label, Spinner, TextFie
 import { Eye, EyeOff } from 'lucide-react'
 import { useCallback, useRef, useState, useTransition } from 'react'
 import { AdminApi } from '~/apis/admin'
+import { useTypedTranslations } from '~/hooks/useTypedTranslations'
+import { useRouter } from '~/lib/i18n/navigation'
 import { loginSchema } from '~/shared/schemas/auth.schema'
 import { ResponseCode } from '~/shared/types/api.type'
 
@@ -15,9 +17,11 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onFocusChange }: LoginFormProps) {
+  const t = useTypedTranslations()
   const [isPending, startTransition] = useTransition()
   const [showPassword, setShowPassword] = useState(false)
   const formRef = useRef<HTMLFormElement>(null)
+  const router = useRouter()
 
   const syncFocusFromActiveElement = useCallback(() => {
     const activeElement = document.activeElement as HTMLElement | null
@@ -49,12 +53,11 @@ export function LoginForm({ onFocusChange }: LoginFormProps) {
       await AdminApi.auth.login({ email, password })
         .then((res) => {
           if (res.code === ResponseCode.SUCCESS) {
-            localStorage.setItem('token', res.data!.token)
-            window.location.href = '/admin/dashboard'
+            router.push('/admin/dashboard')
           }
         })
     })
-  }, [])
+  }, [router])
 
   return (
     <Form className="flex w-96 flex-col gap-4" onSubmit={onSubmit} ref={formRef}>
@@ -69,7 +72,7 @@ export function LoginForm({ onFocusChange }: LoginFormProps) {
           return result.success ? null : result.error.issues[0].message
         }}
       >
-        <Label>Email</Label>
+        <Label>{t('common.admin.login.email')}</Label>
         <InputGroup>
           <InputGroup.Input placeholder="john@example.com" />
         </InputGroup>
@@ -87,12 +90,12 @@ export function LoginForm({ onFocusChange }: LoginFormProps) {
           return result.success ? null : result.error.issues[0].message
         }}
       >
-        <Label>Password</Label>
+        <Label>{t('common.admin.login.password')}</Label>
         <InputGroup>
-          <InputGroup.Input placeholder="Enter your password" />
+          <InputGroup.Input placeholder={t('common.admin.login.passwordPlaceholder')} />
           <InputGroup.Suffix>
             <Button
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-label={showPassword ? t('common.admin.login.hidePassword') : t('common.admin.login.showPassword')}
               className="size-7"
               onPress={() => setShowPassword(prev => !prev)}
               size="sm"
@@ -111,13 +114,13 @@ export function LoginForm({ onFocusChange }: LoginFormProps) {
               <Checkbox.Indicator />
             </Checkbox.Control>
           </Checkbox>
-          <Label htmlFor="basic-terms">Remember email</Label>
+          <Label htmlFor="basic-terms">{t('common.admin.login.rememberEmail')}</Label>
         </div>
         <Button className="w-full" isPending={isPending} type="submit">
           {({ isPending }) => (
             <>
               {isPending ? <Spinner color="current" size="sm" /> : null}
-              Submit
+              {t('common.admin.login.submit')}
             </>
           )}
         </Button>

@@ -23,6 +23,7 @@ import { Pencil } from 'lucide-react'
 import Image from 'next/image'
 import { Fragment, useCallback, useMemo, useState } from 'react'
 import { useAsyncList } from '~/hooks/useAsyncList'
+import { useTypedTranslations } from '~/hooks/useTypedTranslations'
 import { cn } from '~/lib/utils/tools'
 
 interface Timezone {
@@ -58,6 +59,7 @@ function Column(props: ColumnProps) {
 }
 
 function Profile() {
+  const t = useTypedTranslations()
   const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone)
   const [inputValue, setInputValue] = useState('')
 
@@ -125,7 +127,7 @@ function Profile() {
 
   return (
     <>
-      <Column description="Upload and manage your profile picture visible to other users." title="Profile">
+      <Column description={t('common.member.settings.profile.description')} title={t('common.member.settings.profile.title')}>
         <Card>
           <Card.Content>
             <div className="flex items-center gap-4">
@@ -145,23 +147,23 @@ function Profile() {
           </Card.Content>
         </Card>
       </Column>
-      <Column description="Your unique username for identification across the platform." title="Username">
-        <Input aria-label="Username" className="w-full" placeholder="Enter your username" />
+      <Column description={t('common.member.settings.profile.usernameDescription')} title={t('common.member.settings.profile.username')}>
+        <Input aria-label={t('common.member.settings.profile.username')} className="w-full" placeholder={t('common.member.settings.profile.usernamePlaceholder')} />
       </Column>
-      <Column description="Add a brief description about yourself to share with others." title="Personal Profile">
+      <Column description={t('common.member.settings.profile.personalProfileDescription')} title={t('common.member.settings.profile.personalProfile')}>
         <TextArea
-          aria-label="Enter your personal profile"
+          aria-label={t('common.member.settings.profile.personalProfileAria')}
           className="w-full h-32 max-h-40"
-          placeholder="Enter your personal profile"
+          placeholder={t('common.member.settings.profile.personalProfilePlaceholder')}
         />
       </Column>
       <Column
         className="flex gap-2 items-end"
-        description="Select your timezone for accurate time display"
-        title="Timezone"
+        description={t('common.member.settings.profile.timezoneDescription')}
+        title={t('common.member.settings.profile.timezone')}
       >
         <ComboBox
-          aria-label="Timezone"
+          aria-label={t('common.member.settings.profile.timezone')}
           className="w-full"
           inputValue={inputValue}
           menuTrigger="focus"
@@ -170,7 +172,7 @@ function Profile() {
           selectedKey={timezone}
         >
           <ComboBox.InputGroup>
-            <Input placeholder="Search timezone..." />
+            <Input placeholder={t('common.member.settings.profile.searchTimezone')} />
             <ComboBox.Trigger />
           </ComboBox.InputGroup>
           <ComboBox.Popover>
@@ -178,16 +180,16 @@ function Profile() {
               ? (
                   <div className="flex items-center justify-center gap-2 py-8">
                     <Spinner size="sm" />
-                    <span className="text-muted text-sm">Loading timezones...</span>
+                    <span className="text-muted text-sm">{t('common.member.settings.profile.loadingTimezones')}</span>
                   </div>
                 )
               : (
                   <ListBox className="max-h-80 overflow-auto">
                     {filteredItems.length === 0
                       ? (
-                          <ListBox.Item textValue="No results">
+                          <ListBox.Item textValue={t('common.member.settings.profile.noResults')}>
                             <div className="text-sm text-muted py-2 text-center">
-                              No timezones found
+                              {t('common.member.settings.profile.noTimezones')}
                             </div>
                           </ListBox.Item>
                         )
@@ -220,7 +222,7 @@ function Profile() {
                                   {list.loadingState === 'loadingMore' && <Spinner size="sm" />}
                                   <span className="text-muted text-sm">
                                     {list.loadingState === 'loadingMore'
-                                      ? 'Loading more...'
+                                      ? t('common.member.settings.profile.loadingMore')
                                       : ''}
                                   </span>
                                 </div>
@@ -233,12 +235,14 @@ function Profile() {
           </ComboBox.Popover>
         </ComboBox>
       </Column>
-      <Button className="w-full" isDisabled>Save</Button>
+      <Button className="w-full" isDisabled>{t('common.member.settings.actions.save')}</Button>
     </>
   )
 }
 
 function Billing() {
+  const t = useTypedTranslations()
+
   return (
     <Card>
       <Card.Content className="flex flex-row items-center justify-between">
@@ -252,31 +256,34 @@ function Billing() {
           />
           <Card.Header>
             <Card.Title>
-              Payment method
+              {t('common.member.settings.billing.paymentMethod')}
             </Card.Title>
             <Card.Description>
               Stripe
             </Card.Description>
           </Card.Header>
         </div>
-        <Button variant="tertiary">Update</Button>
+        <Button variant="tertiary">{t('common.member.settings.actions.update')}</Button>
       </Card.Content>
     </Card>
   )
 }
 
 function Security() {
+  const t = useTypedTranslations()
+
   return (
     <>
-      <Column className="flex gap-2" description="Update your password to keep your account secure." title="Password">
-        <Input aria-label="Password" className="w-full" placeholder="Enter your password" type="password" />
-        <Button isDisabled variant="tertiary">Save</Button>
+      <Column className="flex gap-2" description={t('common.member.settings.security.passwordDescription')} title={t('common.member.settings.security.password')}>
+        <Input aria-label={t('common.member.settings.security.password')} className="w-full" placeholder={t('common.member.settings.security.passwordPlaceholder')} type="password" />
+        <Button isDisabled variant="tertiary">{t('common.member.settings.actions.save')}</Button>
       </Column>
     </>
   )
 }
 
 function Privacy() {
+  const t = useTypedTranslations()
   const [isExporting, setIsExporting] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
@@ -303,18 +310,18 @@ function Privacy() {
   return (
     <>
       <Column
-        description="Download a copy of all your personal data stored in our system."
-        title="Data Export"
+        description={t('common.member.settings.privacy.dataExportDescription')}
+        title={t('common.member.settings.privacy.dataExport')}
       >
         <Card>
           <Card.Content>
             <div className="flex flex-col gap-3">
               <p className="text-sm text-default-foreground">
-                Request a copy of your data including profile information, settings, and activity history.
+                {t('common.member.settings.privacy.dataExportBody')}
               </p>
               <div className="flex items-center justify-between">
                 <div className="text-xs text-muted">
-                  Format: JSON • Last exported: Never
+                  {t('common.member.settings.privacy.exportMeta')}
                 </div>
                 <Button
                   isDisabled={isExporting}
@@ -322,8 +329,8 @@ function Privacy() {
                   variant="tertiary"
                 >
                   {isExporting
-                    ? 'Exporting...'
-                    : 'Export Data'}
+                    ? t('common.member.settings.privacy.exporting')
+                    : t('common.member.settings.privacy.exportData')}
                 </Button>
               </div>
             </div>
@@ -332,16 +339,16 @@ function Privacy() {
       </Column>
 
       <Column
-        description="Manage how we use cookies to improve your experience."
-        title="Cookie Preferences"
+        description={t('common.member.settings.privacy.cookieDescription')}
+        title={t('common.member.settings.privacy.cookiePreferences')}
       >
         <Card>
           <Card.Content>
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-default-foreground">Necessary Cookies</p>
-                  <p className="text-xs text-muted mt-1">Required for the website to function properly</p>
+                  <p className="text-sm font-medium text-default-foreground">{t('common.member.settings.privacy.necessaryCookies')}</p>
+                  <p className="text-xs text-muted mt-1">{t('common.member.settings.privacy.necessaryCookiesDescription')}</p>
                 </div>
                 <Switch isDisabled isSelected={cookiePrefs.necessary} size="sm" />
               </div>
@@ -350,8 +357,8 @@ function Privacy() {
 
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-default-foreground">Functional Cookies</p>
-                  <p className="text-xs text-muted mt-1">Remember your preferences and settings</p>
+                  <p className="text-sm font-medium text-default-foreground">{t('common.member.settings.privacy.functionalCookies')}</p>
+                  <p className="text-xs text-muted mt-1">{t('common.member.settings.privacy.functionalCookiesDescription')}</p>
                 </div>
                 <Switch
                   isSelected={cookiePrefs.functional}
@@ -364,8 +371,8 @@ function Privacy() {
 
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-default-foreground">Analytics Cookies</p>
-                  <p className="text-xs text-muted mt-1">Help us understand how you use our site</p>
+                  <p className="text-sm font-medium text-default-foreground">{t('common.member.settings.privacy.analyticsCookies')}</p>
+                  <p className="text-xs text-muted mt-1">{t('common.member.settings.privacy.analyticsCookiesDescription')}</p>
                 </div>
                 <Switch
                   isSelected={cookiePrefs.analytics}
@@ -378,8 +385,8 @@ function Privacy() {
 
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-default-foreground">Marketing Cookies</p>
-                  <p className="text-xs text-muted mt-1">Used to deliver personalized advertisements</p>
+                  <p className="text-sm font-medium text-default-foreground">{t('common.member.settings.privacy.marketingCookies')}</p>
+                  <p className="text-xs text-muted mt-1">{t('common.member.settings.privacy.marketingCookiesDescription')}</p>
                 </div>
                 <Switch
                   isSelected={cookiePrefs.marketing}
@@ -390,7 +397,7 @@ function Privacy() {
 
               <div className="flex justify-end mt-2">
                 <Button onPress={handleSaveCookiePrefs} variant="tertiary">
-                  Save Preferences
+                  {t('common.member.settings.privacy.savePreferences')}
                 </Button>
               </div>
             </div>
@@ -399,8 +406,8 @@ function Privacy() {
       </Column>
 
       <Column
-        description="Permanently delete your account and all associated data."
-        title="Delete Account"
+        description={t('common.member.settings.privacy.deleteDescription')}
+        title={t('common.member.settings.privacy.deleteAccount')}
       >
         <Card>
           <Card.Content>
@@ -408,12 +415,12 @@ function Privacy() {
               <div className="flex items-start gap-3">
                 <div className="flex-1">
                   <p className="text-sm text-default-foreground">
-                    Once you delete your account, there is no going back. Please be certain.
+                    {t('common.member.settings.privacy.deleteBody')}
                   </p>
                   <ul className="text-xs text-muted mt-2 space-y-1 list-disc list-inside">
-                    <li>All your data will be permanently deleted</li>
-                    <li>You will lose access to all services</li>
-                    <li>This action cannot be undone</li>
+                    <li>{t('common.member.settings.privacy.deletePointData')}</li>
+                    <li>{t('common.member.settings.privacy.deletePointAccess')}</li>
+                    <li>{t('common.member.settings.privacy.deletePointUndo')}</li>
                   </ul>
                 </div>
               </div>
@@ -423,7 +430,7 @@ function Privacy() {
                   onPress={() => setIsDeleteDialogOpen(true)}
                   variant="tertiary"
                 >
-                  Delete Account
+                  {t('common.member.settings.privacy.deleteAccount')}
                 </Button>
               </div>
             </div>
@@ -437,20 +444,20 @@ function Privacy() {
                 <>
                   <AlertDialog.Header>
                     <AlertDialog.Icon status="danger" />
-                    <AlertDialog.Heading>Delete Account</AlertDialog.Heading>
+                    <AlertDialog.Heading>{t('common.member.settings.privacy.deleteAccount')}</AlertDialog.Heading>
                   </AlertDialog.Header>
                   <AlertDialog.Body>
                     <p className="text-sm text-default-foreground">
-                      Are you absolutely sure you want to delete your account? This action cannot be undone and all your data will be permanently deleted.
+                      {t('common.member.settings.privacy.deleteConfirm')}
                     </p>
                   </AlertDialog.Body>
                   <AlertDialog.Footer>
                     <div className="flex gap-2 justify-end w-full">
                       <Button onPress={() => setIsDeleteDialogOpen(false)} variant="tertiary">
-                        Cancel
+                        {t('common.member.settings.actions.cancel')}
                       </Button>
                       <Button className="bg-danger text-danger-foreground" onPress={handleDeleteAccount}>
-                        Delete Account
+                        {t('common.member.settings.privacy.deleteAccount')}
                       </Button>
                     </div>
                   </AlertDialog.Footer>
@@ -465,18 +472,19 @@ function Privacy() {
 }
 
 export function Settings() {
+  const t = useTypedTranslations()
   const tabs = [
-    { id: 'profile', title: 'Profile', component: Profile },
-    { id: 'security', title: 'Security', component: Security },
-    { id: 'billing', title: 'Billing & Subscription', component: Billing },
-    { id: 'privacy', title: 'Privacy & Data', component: Privacy },
+    { id: 'profile', title: t('common.member.settings.tabs.profile'), component: Profile },
+    { id: 'security', title: t('common.member.settings.tabs.security'), component: Security },
+    { id: 'billing', title: t('common.member.settings.tabs.billing'), component: Billing },
+    { id: 'privacy', title: t('common.member.settings.tabs.privacy'), component: Privacy },
   ]
 
   return (
     <section className="w-full max-w-2xl flex-1 sm:mt-6">
       <Tabs className="w-full">
         <Tabs.ListContainer>
-          <Tabs.List aria-label="Options" className="overflow-x-auto">
+          <Tabs.List aria-label={t('common.member.settings.tabs.ariaLabel')} className="overflow-x-auto">
             {tabs.map(tab => (
               <Tabs.Tab className="flex-1" id={tab.id} key={tab.id}>
                 <span className="inline-block w-full truncate">{tab.title}</span>

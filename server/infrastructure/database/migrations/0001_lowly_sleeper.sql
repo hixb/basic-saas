@@ -1,0 +1,1 @@
+ALTER TABLE "customer_inquiries" DROP COLUMN "password_hash";

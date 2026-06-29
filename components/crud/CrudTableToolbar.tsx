@@ -36,6 +36,15 @@ interface CrudTableToolbarProps {
    * <CrudTable.Toolbar showExport onExport={() => exportToCsv(handle.items)} />
    */
   onExport?: () => void
+  onCreate?: () => void
+  labels?: {
+    deleteSelected?: string
+    filters?: string
+    openFilters?: string
+    closeFilters?: string
+    refresh?: string
+    export?: string
+  }
 }
 
 /**
@@ -62,7 +71,7 @@ interface CrudTableToolbarProps {
  * // With export button
  * <CrudTable.Toolbar showExport onExport={() => exportToCsv(handle.items)} />
  */
-export function CrudTableToolbar({ createLabel = 'Create', showExport = false, onExport }: CrudTableToolbarProps) {
+export function CrudTableToolbar({ createLabel = 'Create', showExport = false, onExport, onCreate, labels }: CrudTableToolbarProps) {
   const { handle, filterPanelOpen, setFilterPanelOpen, hasFilterPanel } = useCrudTableCtx()
   const { selectedKeys, operations, openCreate, handleBatchDelete, loading, refresh, filters } = handle
 
@@ -83,7 +92,7 @@ export function CrudTableToolbar({ createLabel = 'Create', showExport = false, o
       {hasBatchSelection && operations.batchDelete && (
         <Button onPress={handleBatchDelete} size="sm" variant="danger-soft">
           <Trash2 className="size-4" />
-          Delete Selected
+          {labels?.deleteSelected ?? 'Delete Selected'}
         </Button>
       )}
 
@@ -95,7 +104,7 @@ export function CrudTableToolbar({ createLabel = 'Create', showExport = false, o
             variant={filterPanelOpen ? 'secondary' : 'tertiary'}
           >
             <SlidersHorizontal className="size-4" />
-            Filters
+            {labels?.filters ?? 'Filters'}
             {filterCount > 0 && (
               <span
                 className={cn(
@@ -108,7 +117,7 @@ export function CrudTableToolbar({ createLabel = 'Create', showExport = false, o
             )}
           </Button>
           <Tooltip.Content>
-            <p>{filterPanelOpen ? 'Close filters' : 'Open filters'}</p>
+            <p>{filterPanelOpen ? labels?.closeFilters ?? 'Close filters' : labels?.openFilters ?? 'Open filters'}</p>
           </Tooltip.Content>
         </Tooltip>
       )}
@@ -118,12 +127,12 @@ export function CrudTableToolbar({ createLabel = 'Create', showExport = false, o
           <RefreshCcw className={cn('size-4', loading && 'animate-spin')} />
         </Button>
         <Tooltip.Content>
-          <p>Refresh the list</p>
+          <p>{labels?.refresh ?? 'Refresh the list'}</p>
         </Tooltip.Content>
       </Tooltip>
 
-      {operations.create && (
-        <Button onPress={openCreate} size="sm" variant="primary">
+      {(operations.create || onCreate) && (
+        <Button onPress={onCreate ?? openCreate} size="sm" variant="primary">
           <Plus className="size-4" />
           {createLabel}
         </Button>
@@ -133,10 +142,10 @@ export function CrudTableToolbar({ createLabel = 'Create', showExport = false, o
         <Tooltip delay={0}>
           <Button onPress={onExport} size="sm" variant="primary">
             <Download className="size-4" />
-            Export
+            {labels?.export ?? 'Export'}
           </Button>
           <Tooltip.Content>
-            <p>Export</p>
+            <p>{labels?.export ?? 'Export'}</p>
           </Tooltip.Content>
         </Tooltip>
       )}

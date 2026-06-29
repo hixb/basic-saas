@@ -5,16 +5,21 @@ import { Button, InputGroup, ScrollShadow, Separator, Tooltip } from '@heroui/re
 import { AnimatePresence, motion } from 'framer-motion'
 import { Pin, PinOff, Search, X } from 'lucide-react'
 import { useCallback, useState } from 'react'
+import { LanguageSwitch } from '~/components/switcher/LanguageSwitch'
 import { ThemeSwitch } from '~/components/switcher/ThemeSwitch'
 import { useRecentPages } from '~/hooks/useRecentPages'
+import { useTypedTranslations } from '~/hooks/useTypedTranslations'
 import { usePathname, useRouter } from '~/lib/i18n/navigation'
 import { cn } from '~/lib/utils/tools'
 
 /** Maps admin route paths to their sidebar menu labels. */
 const ADMIN_NAV_LABELS: Record<string, string> = {
-  '/admin/dashboard': 'Dashboard',
-  '/admin/users': 'Users',
-  '/admin/settings': 'Settings',
+  '/admin/dashboard': 'common.admin.nav.dashboard',
+  '/admin/users': 'common.admin.nav.users',
+  '/admin/materials': 'common.admin.nav.materials',
+  '/admin/inquiries': 'common.admin.nav.inquiries',
+  '/admin/sensitive-words': 'common.admin.nav.sensitiveWords',
+  '/admin/settings': 'common.admin.nav.settings',
 }
 
 /** Returns the nav label for the given pathname, with prefix fallback for sub-routes. */
@@ -44,6 +49,7 @@ interface HistoryItemProps {
 
 function HistoryItem({ page, isCurrent, onTogglePin, onRemove }: HistoryItemProps) {
   const router = useRouter()
+  const t = useTypedTranslations()
   const [hovered, setHovered] = useState(false)
 
   return (
@@ -77,7 +83,7 @@ function HistoryItem({ page, isCurrent, onTogglePin, onRemove }: HistoryItemProp
             <Tooltip delay={400}>
               <Tooltip.Trigger>
                 <div
-                  aria-label={page.pinned ? 'Unpin page' : 'Pin page'}
+                  aria-label={page.pinned ? t('common.admin.topbar.unpin') : t('common.admin.topbar.pin')}
                   className="flex size-4 cursor-pointer items-center justify-center rounded-full text-muted/70 transition-colors hover:bg-foreground/10 hover:text-foreground"
                   onClick={onTogglePin}
                   onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onTogglePin()}
@@ -88,7 +94,7 @@ function HistoryItem({ page, isCurrent, onTogglePin, onRemove }: HistoryItemProp
                 </div>
               </Tooltip.Trigger>
               <Tooltip.Content>
-                <p>{page.pinned ? 'Unpin' : 'Pin'}</p>
+                <p>{page.pinned ? t('common.admin.topbar.unpin') : t('common.admin.topbar.pin')}</p>
               </Tooltip.Content>
             </Tooltip>
 
@@ -96,7 +102,7 @@ function HistoryItem({ page, isCurrent, onTogglePin, onRemove }: HistoryItemProp
               <Tooltip delay={400}>
                 <Tooltip.Trigger>
                   <div
-                    aria-label="Remove from history"
+                    aria-label={t('common.admin.topbar.remove')}
                     className="flex size-4 cursor-pointer items-center justify-center rounded-full text-muted/70 transition-colors hover:bg-danger/10 hover:text-danger"
                     onClick={onRemove}
                     onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && onRemove()}
@@ -107,7 +113,7 @@ function HistoryItem({ page, isCurrent, onTogglePin, onRemove }: HistoryItemProp
                   </div>
                 </Tooltip.Trigger>
                 <Tooltip.Content>
-                  <p>Remove</p>
+                  <p>{t('common.admin.topbar.remove')}</p>
                 </Tooltip.Content>
               </Tooltip>
             )}
@@ -119,8 +125,10 @@ function HistoryItem({ page, isCurrent, onTogglePin, onRemove }: HistoryItemProp
 }
 
 export function AdminTopbar() {
+  const t = useTypedTranslations()
   const pathname = usePathname()
-  const label = getNavLabel(pathname)
+  const labelKey = getNavLabel(pathname)
+  const label = labelKey ? t(labelKey as any) : ''
   const { pages, togglePin, remove } = useRecentPages(pathname, label)
 
   const pinnedPages = pages.filter(p => p.pinned)
@@ -166,7 +174,7 @@ export function AdminTopbar() {
                           autoFocus
                           onChange={e => setQuery(e.target.value)}
                           onKeyDown={e => e.key === 'Escape' && closeSearch()}
-                          placeholder="Search..."
+                          placeholder={t('common.admin.nav.search')}
                           value={query}
                         />
                         <InputGroup.Suffix>
@@ -228,6 +236,7 @@ export function AdminTopbar() {
       </ScrollShadow>
 
       <div className="flex shrink-0 items-center gap-2">
+        <LanguageSwitch />
         <ThemeSwitch />
       </div>
     </div>

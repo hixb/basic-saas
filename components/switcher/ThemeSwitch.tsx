@@ -7,6 +7,7 @@ import { useTheme } from 'next-themes'
 import { useCallback, useEffect, useState } from 'react'
 import { Imac, Moon, Sun } from '~/components/icons'
 import { WEBSITE_CONFIG } from '~/config/website'
+import { useTypedTranslations } from '~/hooks/useTypedTranslations'
 
 interface IconBoxProps {
   children: ReactNode
@@ -15,10 +16,10 @@ interface IconBoxProps {
   onPress: () => void
 }
 
-const THEME_OPTIONS: Array<{ Icon: ComponentType<{ className?: string }>, label: string, value: ThemeValue }> = [
-  { value: 'light', label: 'Light theme', Icon: Sun },
-  { value: 'dark', label: 'Dark theme', Icon: Moon },
-  { value: 'system', label: 'System theme', Icon: Imac },
+const THEME_OPTIONS: Array<{ Icon: ComponentType<{ className?: string }>, labelKey: string, value: ThemeValue }> = [
+  { value: 'light', labelKey: 'common.switcher.theme.light', Icon: Sun },
+  { value: 'dark', labelKey: 'common.switcher.theme.dark', Icon: Moon },
+  { value: 'system', labelKey: 'common.switcher.theme.system', Icon: Imac },
 ]
 
 function IconBox({ children, isActive, label, onPress }: IconBoxProps) {
@@ -45,11 +46,11 @@ function normalizeTheme(value?: string): ThemeValue {
 }
 
 export function ThemeSwitch() {
+  const t = useTypedTranslations()
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect
     setMounted(true)
   }, [])
 
@@ -73,9 +74,9 @@ export function ThemeSwitch() {
           <Popover.Content>
             <Popover.Dialog className="w-48">
               <Popover.Arrow />
-              <Popover.Heading>Select Theme</Popover.Heading>
+              <Popover.Heading>{t('common.switcher.theme.title')}</Popover.Heading>
               <ListBox
-                aria-label="Theme selection"
+                aria-label={t('common.switcher.theme.ariaLabel')}
                 className="mt-2 p-0"
                 onSelectionChange={(keys) => {
                   const selected = Array.from(keys)[0]
@@ -86,15 +87,19 @@ export function ThemeSwitch() {
                 selectedKeys={[currentTheme]}
                 selectionMode="single"
               >
-                {THEME_OPTIONS.map(({ value, label, Icon }) => (
-                  <ListBox.Item id={value} key={value} textValue={label}>
-                    <Icon className="size-4" />
-                    <div className="flex flex-col">
-                      <Label>{label}</Label>
-                    </div>
-                    <ListBox.ItemIndicator />
-                  </ListBox.Item>
-                ))}
+                {THEME_OPTIONS.map(({ value, labelKey, Icon }) => {
+                  const label = t(labelKey as any)
+
+                  return (
+                    <ListBox.Item id={value} key={value} textValue={label}>
+                      <Icon className="size-4" />
+                      <div className="flex flex-col">
+                        <Label>{label}</Label>
+                      </div>
+                      <ListBox.ItemIndicator />
+                    </ListBox.Item>
+                  )
+                })}
               </ListBox>
             </Popover.Dialog>
           </Popover.Content>
@@ -102,8 +107,9 @@ export function ThemeSwitch() {
       </div>
 
       <div className="hidden sm:flex rounded-full py-1 px-2 items-center bg-default-hover max-w-max">
-        {THEME_OPTIONS.map(({ value, label, Icon }) => {
+        {THEME_OPTIONS.map(({ value, labelKey, Icon }) => {
           const isActive = currentTheme === value
+          const label = t(labelKey as any)
 
           return (
             <IconBox

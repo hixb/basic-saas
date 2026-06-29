@@ -105,6 +105,16 @@ interface CrudTableContentProps<T> {
    * />
    */
   'renderActions'?: (params: { row: T, rowId: string | number }) => ReactNode
+  'labels'?: {
+    actions?: string
+    noResults?: string
+    rowsPerPage?: string
+    pageSummary?: (params: { start: number, end: number, total: number }) => string
+    previous?: string
+    next?: string
+    selectAll?: string
+    selectRow?: string
+  }
 }
 
 /**
@@ -149,6 +159,7 @@ export function CrudTableContent<T>({
   expandable,
   renderDetail,
   renderActions,
+  labels,
 }: CrudTableContentProps<T>) {
   const { handle, columns, expandedRowId, setExpandedRowId, hasFormModal } = useCrudTableCtx()
 
@@ -278,9 +289,9 @@ export function CrudTableContent<T>({
   const allColumns = useMemo<ColumnDef<T>[]>(() => [
     ...typedColumns,
     ...(hasActions
-      ? [{ key: '__actions__', label: 'Actions', className: 'text-end' } satisfies ColumnDef<T>]
+      ? [{ key: '__actions__', label: labels?.actions ?? 'Actions', className: 'text-end' } satisfies ColumnDef<T>]
       : []),
-  ], [typedColumns, hasActions])
+  ], [typedColumns, hasActions, labels?.actions])
 
   const detailColSpan = useMemo(
     () => (isExpandable || selectable ? 1 : 0) + allColumns.length,
@@ -365,7 +376,7 @@ export function CrudTableContent<T>({
               >
                 {selectable
                   ? (
-                      <Checkbox aria-label="Select all" className={cn(isExpandable ? 'ml-7' : '')} slot="selection">
+                      <Checkbox aria-label={labels?.selectAll ?? 'Select all'} className={cn(isExpandable ? 'ml-7' : '')} slot="selection">
                         <Checkbox.Control>
                           <Checkbox.Indicator />
                         </Checkbox.Control>
@@ -406,7 +417,7 @@ export function CrudTableContent<T>({
               ? () => (
                   <EmptyState className="flex h-full w-full flex-col items-center justify-center gap-4 py-10 text-center">
                     <PackageOpen className="size-6 text-muted" />
-                    <span className="text-sm text-muted">No results found</span>
+                    <span className="text-sm text-muted">{labels?.noResults ?? 'No results found'}</span>
                   </EmptyState>
                 )
               : undefined}
@@ -455,7 +466,7 @@ export function CrudTableContent<T>({
                               </Button>
                             )}
                             {selectable && (
-                              <Checkbox aria-label="Select row" slot="selection" variant="secondary">
+                              <Checkbox aria-label={labels?.selectRow ?? 'Select row'} slot="selection" variant="secondary">
                                 <Checkbox.Control>
                                   <Checkbox.Indicator />
                                 </Checkbox.Control>
@@ -517,7 +528,7 @@ export function CrudTableContent<T>({
           <Pagination.Summary>
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1.5">
-                <span className="whitespace-nowrap">Rows per page</span>
+                <span className="whitespace-nowrap">{labels?.rowsPerPage ?? 'Rows per page'}</span>
                 <Select
                   aria-label="Rows per page"
                   className="w-20 [&_.select__trigger]:min-h-7 [&_.select__trigger]:py-0.5 [&_.select__value]:text-xs! [&_.select__value]:sm:text-xs!"
@@ -542,14 +553,16 @@ export function CrudTableContent<T>({
                 </Select>
               </div>
               <span className="select-none text-muted">·</span>
-              {loading ? <Spinner size="sm" /> : <span>{`${start} to ${end} of ${total} results`}</span>}
+              {loading
+                ? <Spinner size="sm" />
+                : <span>{labels?.pageSummary?.({ start, end, total }) ?? `${start} to ${end} of ${total} results`}</span>}
             </div>
           </Pagination.Summary>
           <Pagination.Content className="select-none">
             <Pagination.Item>
               <Pagination.Previous isDisabled={page === 1} onPress={handlePreviousPage}>
                 <Pagination.PreviousIcon />
-                Previous
+                {labels?.previous ?? 'Previous'}
               </Pagination.Previous>
             </Pagination.Item>
             {pageNumbers.map((p, i) =>
@@ -569,7 +582,7 @@ export function CrudTableContent<T>({
             )}
             <Pagination.Item>
               <Pagination.Next isDisabled={page === totalPages} onPress={handleNextPage}>
-                Next
+                {labels?.next ?? 'Next'}
                 <Pagination.NextIcon />
               </Pagination.Next>
             </Pagination.Item>

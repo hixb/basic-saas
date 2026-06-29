@@ -1,8 +1,8 @@
 import antfu from '@antfu/eslint-config'
 
 export default antfu({
-  ignores: ['.claude/**', 'skills-lock.json'],
-  react: true,
+  ignores: ['.agents/**', '.claude/**', 'skills-lock.json'],
+  react: false,
   extends: ['next/core-web-vitals', 'next/typescript'],
   rules: {
     '@typescript-eslint/no-namespace': 'off',
@@ -14,6 +14,8 @@ export default antfu({
     'no-irregular-whitespace': 'off',
     'n/prefer-global/process': 'off',
 
+    'e18e/prefer-static-regex': 'off',
+    'react-hooks-extra/no-direct-set-state-in-use-effect': 'off',
     'react-hooks/exhaustive-deps': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     'react-refresh/only-export-components': 'off',

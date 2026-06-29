@@ -1,4 +1,653 @@
 {
   "hello": "你好",
-  "name": "你好 {name}"
+  "name": "你好 {name}",
+  "switcher": {
+    "language": {
+      "title": "选择语言",
+      "ariaLabel": "语言选择"
+    },
+    "theme": {
+      "title": "选择主题",
+      "ariaLabel": "主题选择",
+      "light": "浅色主题",
+      "dark": "深色主题",
+      "system": "跟随系统"
+    }
+  },
+  "home": {
+    "brand": "CargoPilot",
+    "nav": {
+      "features": "功能",
+      "materials": "资料",
+      "faq": "FAQ",
+      "admin": "后台登录",
+      "platform": "平台",
+      "specialties": "场景",
+      "insights": "洞察",
+      "contact": "联系"
+    },
+    "hero": {
+      "badge": "跨境电商运营中台",
+      "title": "为跨境电商团队打造的运营平台。",
+      "description": "用一个统一的运营层，协调平台上线、物流交接和合规审核，让每一次跨境增长更稳。",
+      "primary": "预约审核",
+      "secondary": "查看运营资料",
+      "panelLabel": "实时路线洞察",
+      "panelTitle": "平台准备度",
+      "panelStatus": "健康"
+    },
+    "metrics": {
+      "orders": "已协调订单",
+      "countries": "覆盖贸易路线",
+      "sla": "平台可用性"
+    },
+    "features": {
+      "eyebrow": "为跨境团队打造",
+      "title": "从刊登到交付，让每个市场顺畅推进",
+      "catalog": {
+        "title": "多平台商品资料管理",
+        "description": "集中管理 Amazon、Shopify、TikTok Shop 和批发客户所需的商品属性、资料和上架要求。"
+      },
+      "fulfillment": {
+        "title": "履约可视化",
+        "description": "在货物离开发货地之前，跟踪备货、物流文件、仓库交接和路线准备度。"
+      },
+      "compliance": {
+        "title": "资料审核流程",
+        "description": "收集证书、审计文件、营业执照和产品资料，让运营团队在上线前完成风险审核。"
+      }
+    },
+    "workflow": {
+      "eyebrow": "运营流程",
+      "title": "从供应商资料到平台上线，流程更清晰",
+      "description": "用结构化审核流程替代分散的表格和聊天记录，统一处理店铺、发货和商品资料。",
+      "steps": {
+        "connect": {
+          "title": "连接市场背景",
+          "description": "统一收集渠道、地区、品类和上线优先级。"
+        },
+        "prepare": {
+          "title": "准备资料包",
+          "description": "在后台内容流程中准备营业执照、产品资料、路线备注和合规文件。"
+        },
+        "ship": {
+          "title": "减少上线意外",
+          "description": "让运营团队具备路线、审批和优先级判断所需的信息。"
+        }
+      }
+    },
+    "materials": {
+      "eyebrow": "卖家资料库",
+      "title": "后台发布的运营内容",
+      "description": "这些资料由后台管理员创建并发布，会展示在前台首页。访客只能阅读内容页，不能在前台上传资料。",
+      "cta": "进入后台管理",
+      "empty": "暂无已发布资料。请在后台创建并发布资料。"
+    },
+    "form": {
+      "eyebrow": "开放提交",
+      "title": "申请跨境运营审核",
+      "description": "所有访客都可以提交，无需门户密码。描述内容会根据后台维护的敏感词列表进行检查。",
+      "name": "联系人",
+      "company": "公司",
+      "email": "工作邮箱",
+      "phone": "电话",
+      "descriptionLabel": "业务描述",
+      "descriptionPlaceholder": "说明销售渠道、目标市场、商品品类、履约方式和当前阻塞点。",
+      "submit": "提交申请",
+      "success": "申请提交成功",
+      "points": {
+        "free": "卖家、服务商、供应商和物流团队都可以提交。",
+        "response": "后台管理员可以查看每一条提交记录。",
+        "secure": "敏感描述会在进入审核队列前被拦截。"
+      }
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "跨境团队最常问的问题",
+      "items": [
+        {
+          "question": "谁可以提交首页表单？",
+          "answer": "所有访客都可以提交。表单只收集联系方式和业务背景，不需要密码。"
+        },
+        {
+          "question": "资料内容从哪里来？",
+          "answer": "资料卡片由后台管理员创建并发布。访客可以阅读详情页，但不会在前台上传资料。"
+        },
+        {
+          "question": "提交内容会进入哪里？",
+          "answer": "首页咨询表单会写入真实数据库，并显示在后台管理系统中。"
+        },
+        {
+          "question": "敏感描述如何处理？",
+          "answer": "提交前会根据启用的敏感词列表检查描述内容，命中后会阻止提交。"
+        }
+      ]
+    },
+    "channels": {
+      "label": "服务平台运营、物流履约与供应商团队"
+    },
+    "quote": "“CargoPilot 让运营团队可以在一个地方看清哪些准备好了、哪些被阻塞、哪些必须在上线日期前推进。”",
+    "specialties": {
+      "title": "为每一条跨境链路设计工作流。",
+      "items": {
+        "catalog": "商品资料运营",
+        "fulfillment": "仓库交接",
+        "compliance": "合规审核",
+        "analytics": "上线洞察"
+      }
+    },
+    "platform": {
+      "title": "让卖家、供应商和物流团队保持一致的跨境运营层。",
+      "cta": "了解平台"
+    },
+    "footer": {
+      "description": "面向跨境电商工作流构建与部署的可信运营基础设施。",
+      "platform": "平台",
+      "connect": "联系"
+    }
+  },
+  "details": {
+    "eyebrow": "资料详情",
+    "back": "返回资料列表",
+    "download": "打开附件",
+    "empty": {
+      "title": "未选择已发布资料",
+      "description": "请从首页打开资料内容。只有后台发布的资料才能在这里展示。",
+      "back": "返回首页"
+    },
+    "insights": [
+      "面向平台上线的背景信息",
+      "履约交接备注",
+      "合规审核参考"
+    ],
+    "sidebar": {
+      "title": "这份资料可以帮助你",
+      "points": {
+        "platform": "提前明确平台上架所需信息。",
+        "fulfillment": "对齐仓库、承运商和文件交接。",
+        "compliance": "让运营和审核人员持续看到风险备注。"
+      }
+    }
+  },
+  "admin": {
+    "nav": {
+      "brand": "后台",
+      "dashboard": "仪表盘",
+      "users": "用户",
+      "materials": "资料",
+      "materialCategories": "资料分类",
+      "inquiries": "用户事项",
+      "sensitiveWords": "敏感词",
+      "personalCenter": "个人中心",
+      "settings": "设置",
+      "signOut": "退出登录",
+      "adminUser": "管理员",
+      "search": "搜索..."
+    },
+    "pages": {
+      "dashboard": {
+        "title": "仪表盘",
+        "description": "基于真实数据库记录查看用户事项、已发布资料、敏感词拦截和后台运营状态。"
+      },
+      "users": {
+        "title": "用户管理",
+        "description": "查看并管理平台注册用户。"
+      },
+      "materials": {
+        "title": "内容资料",
+        "description": "创建并发布展示在前台的资料内容页。"
+      },
+      "materialCategories": {
+        "title": "资料分类",
+        "description": "管理创建内容资料时可选择的分类。"
+      },
+      "inquiries": {
+        "title": "用户事项",
+        "description": "跟踪前台提交记录和敏感词检查结果。"
+      },
+      "sensitiveWords": {
+        "title": "敏感词",
+        "description": "管理用于校验前台描述内容的屏蔽词。"
+      },
+      "settings": {
+        "title": "设置",
+        "description": "管理个人资料、安全验证和通知偏好。"
+      }
+    },
+    "crud": {
+      "actions": "操作",
+      "noResults": "暂无结果",
+      "rowsPerPage": "每页行数",
+      "pageSummary": "共 {total} 条，当前 {start} 至 {end} 条",
+      "previous": "上一页",
+      "next": "下一页",
+      "selectAll": "全选",
+      "selectRow": "选择行",
+      "deleteSelected": "删除已选",
+      "filters": "筛选",
+      "openFilters": "打开筛选",
+      "closeFilters": "关闭筛选",
+      "refresh": "刷新列表",
+      "export": "导出",
+      "cancel": "取消",
+      "create": "创建",
+      "save": "保存"
+    },
+    "status": {
+      "draft": "草稿",
+      "published": "已发布",
+      "archived": "已归档",
+      "active": "启用",
+      "disabled": "禁用"
+    },
+    "topbar": {
+      "pin": "固定",
+      "unpin": "取消固定",
+      "remove": "移除"
+    },
+    "login": {
+      "title": "欢迎回来",
+      "description": "登录你的 {siteName} 后台账号以继续操作",
+      "email": "邮箱",
+      "password": "密码",
+      "passwordPlaceholder": "请输入密码",
+      "showPassword": "显示密码",
+      "hidePassword": "隐藏密码",
+      "rememberEmail": "记住邮箱",
+      "submit": "登录"
+    },
+    "dashboard": {
+      "metrics": {
+        "totalInquiries": "用户事项总数",
+        "totalInquiriesDescription": "前台公开表单提交后写入数据库的全部记录。",
+        "newInquiries": "待处理事项",
+        "newInquiriesDescription": "等待后台管理员审核的新提交。",
+        "publishedMaterials": "已发布资料",
+        "publishedMaterialsDescription": "全部状态下共有 {total} 条资料记录。",
+        "sensitiveHits": "敏感词命中",
+        "sensitiveHitsDescription": "被启用敏感词拦截或标记的提交。",
+        "activeCategories": "启用分类",
+        "activeCategoriesDescription": "创建和发布资料时可以选择的分类。",
+        "activeSensitiveWords": "启用敏感词",
+        "activeSensitiveWordsDescription": "当前用于检查前台描述内容的词语。",
+        "activeUsers": "启用管理员",
+        "activeUsersDescription": "可以访问后台管理系统的启用用户。",
+        "archivedMaterials": "已归档资料",
+        "archivedMaterialsDescription": "已经从前台展示中移除的资料。"
+      },
+      "charts": {
+        "inquiryTrend": "用户事项趋势",
+        "inquiryTrendDescription": "最近七天提交量和敏感词命中量。",
+        "inquiries": "用户事项",
+        "sensitiveHits": "敏感词命中",
+        "countryDistribution": "访客位置",
+        "countryDistributionDescription": "根据用户事项地理位置查询得到的国家排行。",
+        "materialStatus": "资料状态",
+        "materialStatusDescription": "内容资料在不同发布状态下的分布。",
+        "sensitiveSeverity": "敏感词级别",
+        "sensitiveSeverityDescription": "启用敏感词按级别统计。"
+      },
+      "recent": {
+        "title": "最近用户事项",
+        "description": "最新前台提交记录，包含位置和敏感词检查状态。",
+        "unknownLocation": "未知位置"
+      },
+      "empty": {
+        "countries": "暂未捕获到地理位置数据。",
+        "inquiries": "暂未存储任何用户提交。"
+      }
+    },
+    "formErrors": {
+      "required": "请填写{field}。",
+      "tooSmall": "{field}至少需要 {min} 个字符。",
+      "tooBig": "{field}不能超过 {max} 个字符。",
+      "invalidEmail": "请输入有效的邮箱地址。",
+      "invalidUrl": "请输入有效的{field}链接。",
+      "unknown": "保存失败，请检查表单后重试。",
+      "fields": {
+        "form": "表单"
+      }
+    },
+    "materials": {
+      "actions": {
+        "create": "新建资料"
+      },
+      "columns": {
+        "title": "标题",
+        "summary": "摘要",
+        "category": "分类",
+        "content": "正文",
+        "file": "附件",
+        "size": "大小",
+        "status": "状态",
+        "createdAt": "创建时间"
+      },
+      "categories": {
+        "marketplace": "平台运营",
+        "logistics": "物流履约",
+        "compliance": "合规审核",
+        "playbook": "操作手册"
+      },
+      "form": {
+        "createTitle": "新建资料",
+        "editTitle": "编辑资料",
+        "title": "标题",
+        "summary": "摘要",
+        "category": "分类",
+        "content": "正文",
+        "cover": "封面",
+        "attachment": "附件",
+        "noFile": "暂无上传文件",
+        "status": "状态",
+        "uploadCover": "上传封面",
+        "uploadFile": "上传附件",
+        "uploaded": "文件上传成功",
+        "insertAsset": "插入资源",
+        "markdownImages": "图片",
+        "markdownVideos": "视频",
+        "markdownFiles": "文件"
+      },
+      "editor": {
+        "createPageTitle": "新建内容资料",
+        "createPageDescription": "用完整页面编写前台资料内容，设置分类、封面、正文和发布状态。",
+        "editPageTitle": "编辑内容资料",
+        "editPageDescription": "更新已创建的前台资料内容，调整 Markdown 正文、资源和发布状态。",
+        "backToList": "返回资料列表",
+        "loading": "正在加载资料...",
+        "loadFailed": "资料加载失败",
+        "created": "资料创建成功",
+        "updated": "资料保存成功",
+        "basicInfo": "基础信息",
+        "basicInfoDescription": "这些内容会影响列表展示、详情页摘要和后台检索。",
+        "markdownContent": "Markdown 正文",
+        "markdownContentDescription": "可以插入图片、视频和附件链接；前台详情页会按 Markdown 渲染。",
+        "assets": "封面与附件",
+        "assetsDescription": "封面用于列表和详情页视觉展示，附件可作为资料文件存储。",
+        "publishChecklist": "发布检查",
+        "checkTitle": "标题和摘要清晰完整",
+        "checkCategory": "已选择正确分类",
+        "checkContent": "正文包含可读的运营资料"
+      },
+      "validation": {
+        "title": "请填写标题",
+        "summary": "请填写摘要",
+        "content": "请填写正文"
+      }
+    },
+    "users": {
+      "columns": {
+        "username": "用户名",
+        "nickname": "昵称",
+        "email": "邮箱",
+        "status": "状态",
+        "createdAt": "创建时间"
+      },
+      "stats": {
+        "total": "用户总数",
+        "totalSubtext": "全部注册用户",
+        "active": "启用用户",
+        "activeSubtext": "占总数 {percent}%",
+        "disabled": "停用用户",
+        "disabledSubtext": "当前无法访问后台",
+        "newThisMonth": "本月新增",
+        "newThisMonthSubtext": "本月注册用户"
+      }
+    },
+    "settings": {
+      "tabs": {
+        "ariaLabel": "设置分组",
+        "profile": "个人资料",
+        "security": "安全",
+        "notifications": "通知"
+      },
+      "actions": {
+        "saved": "已保存",
+        "updated": "已更新",
+        "saveChanges": "保存修改",
+        "updatePassword": "更新密码",
+        "revoke": "撤销"
+      },
+      "profile": {
+        "avatarAlt": "个人头像",
+        "changePhoto": "更换头像",
+        "removePhoto": "移除",
+        "personalInformation": "个人信息",
+        "firstName": "名",
+        "firstNamePlaceholder": "请输入名",
+        "lastName": "姓",
+        "lastNamePlaceholder": "请输入姓",
+        "emailAddress": "邮箱地址",
+        "emailDescription": "邮箱无法修改。如需帮助请联系支持团队。",
+        "bio": "简介",
+        "bioPlaceholder": "写一段简短的个人介绍..."
+      },
+      "security": {
+        "changePassword": "修改密码",
+        "currentPassword": "当前密码",
+        "currentPasswordPlaceholder": "请输入当前密码",
+        "newPassword": "新密码",
+        "newPasswordPlaceholder": "至少 8 个字符",
+        "confirmPassword": "确认密码",
+        "confirmPasswordPlaceholder": "再次输入新密码",
+        "toggleVisibility": "切换可见性",
+        "twoFactor": "双重验证",
+        "twoFactorEnabled": "你的账号已启用第二步验证保护。",
+        "twoFactorDisabled": "登录时除了密码外，还需要输入验证码。",
+        "setupTwoFactor": "设置双重验证",
+        "confirmEnable": "确认并启用",
+        "twoFactorQrTitle": "双重验证二维码",
+        "scanTitle": "使用验证器扫码",
+        "scanDescription": "打开 Google Authenticator、Authy 或任何兼容 TOTP 的应用扫描二维码。",
+        "manualKey": "无法扫码？手动输入这个密钥",
+        "otpLabel": "输入应用中的 6 位验证码",
+        "activeSessions": "活跃会话",
+        "current": "当前",
+        "sessions": {
+          "mac": "上海 · Chrome 122 · 2 分钟前",
+          "iphone": "上海 · Safari 17 · 3 小时前",
+          "windows": "北京 · Edge 121 · 2 天前"
+        },
+        "strength": {
+          "tooWeak": "非常弱",
+          "weak": "较弱",
+          "fair": "一般",
+          "good": "良好",
+          "strong": "强"
+        }
+      },
+      "notifications": {
+        "emailNotifications": "邮件通知",
+        "emailDescription": "发送至 admin@example.com。",
+        "pushNotifications": "推送通知",
+        "pushDescription": "浏览器和移动端推送提醒偏好。",
+        "loginAlerts": "登录提醒",
+        "loginAlertsDescription": "当账号检测到新的登录时通知你。",
+        "securityUpdates": "安全更新",
+        "securityUpdatesDescription": "重要安全公告和关键策略变更。",
+        "productUpdates": "产品更新",
+        "productUpdatesDescription": "来自团队的新功能、改进和发布说明。",
+        "realtimeAlerts": "实时提醒",
+        "realtimeAlertsDescription": "关键系统事件的即时推送通知。",
+        "weeklyDigest": "每周摘要",
+        "weeklyDigestDescription": "整理后的每周账号活动摘要。"
+      }
+    },
+    "materialCategories": {
+      "actions": {
+        "create": "新建分类"
+      },
+      "columns": {
+        "name": "名称",
+        "slug": "标识",
+        "description": "描述",
+        "status": "状态",
+        "createdAt": "创建时间"
+      },
+      "form": {
+        "createTitle": "新建资料分类",
+        "editTitle": "编辑资料分类",
+        "name": "名称",
+        "slug": "标识",
+        "description": "描述",
+        "status": "状态"
+      },
+      "validation": {
+        "name": "请填写分类名称",
+        "slug": "请填写分类标识"
+      }
+    },
+    "inquiries": {
+      "columns": {
+        "contact": "联系人",
+        "company": "公司",
+        "email": "邮箱",
+        "phone": "电话",
+        "location": "位置",
+        "description": "描述",
+        "sensitive": "敏感词",
+        "status": "状态",
+        "createdAt": "创建时间"
+      },
+      "geo": {
+        "ip": "IP",
+        "countryCode": "国家代码",
+        "region": "区域",
+        "country": "国家",
+        "city": "城市",
+        "emoji": "旗帜"
+      },
+      "sensitive": {
+        "hit": "命中",
+        "clean": "正常"
+      }
+    },
+    "sensitiveWords": {
+      "actions": {
+        "create": "新建敏感词"
+      },
+      "columns": {
+        "word": "词语",
+        "severity": "级别",
+        "status": "状态",
+        "note": "备注",
+        "createdAt": "创建时间"
+      },
+      "severity": {
+        "low": "低",
+        "medium": "中",
+        "high": "高"
+      },
+      "form": {
+        "createTitle": "新建敏感词",
+        "editTitle": "编辑敏感词",
+        "word": "词语",
+        "severity": "级别",
+        "status": "状态",
+        "note": "备注"
+      },
+      "validation": {
+        "word": "请填写敏感词"
+      }
+    }
+  },
+  "contact": {
+    "back": "返回首页",
+    "title": "告诉我们你的跨境运营模式。",
+    "description": "提交你的渠道、地区、商品品类和当前阻塞点。后台管理员会在管理系统中查看这条申请。",
+    "placeholders": {
+      "contactName": "张三",
+      "companyName": "北星供应链"
+    },
+    "errors": {
+      "required": "请填写{field}。",
+      "tooSmall": "{field}至少需要 {min} 个字符。",
+      "tooBig": "{field}不能超过 {max} 个字符。",
+      "invalidEmail": "请输入有效的邮箱地址。",
+      "invalidUrl": "请输入有效的{field}链接。",
+      "sensitiveContent": "业务描述包含违禁词，请修改后再提交。",
+      "unknown": "提交失败，请检查表单后重试。",
+      "fields": {
+        "form": "表单",
+        "contactName": "联系人",
+        "companyName": "公司",
+        "email": "邮箱",
+        "phone": "电话",
+        "description": "业务描述"
+      }
+    }
+  },
+  "member": {
+    "pages": {
+      "settings": {
+        "title": "设置",
+        "description": "自定义设置、邮件偏好和网页外观。"
+      }
+    },
+    "settings": {
+      "tabs": {
+        "ariaLabel": "选项",
+        "profile": "个人资料",
+        "security": "安全",
+        "billing": "账单与订阅",
+        "privacy": "隐私与数据"
+      },
+      "actions": {
+        "save": "保存",
+        "update": "更新",
+        "cancel": "取消"
+      },
+      "profile": {
+        "title": "个人资料",
+        "description": "上传并管理其他用户可见的头像。",
+        "username": "用户名",
+        "usernameDescription": "用于在平台内识别你的唯一用户名。",
+        "usernamePlaceholder": "请输入用户名",
+        "personalProfile": "个人简介",
+        "personalProfileDescription": "添加一段简短介绍，与其他用户分享。",
+        "personalProfileAria": "输入个人简介",
+        "personalProfilePlaceholder": "输入个人简介",
+        "timezone": "时区",
+        "timezoneDescription": "选择时区以准确显示时间",
+        "searchTimezone": "搜索时区...",
+        "loadingTimezones": "正在加载时区...",
+        "noResults": "无结果",
+        "noTimezones": "未找到时区",
+        "loadingMore": "加载更多..."
+      },
+      "billing": {
+        "paymentMethod": "支付方式"
+      },
+      "security": {
+        "password": "密码",
+        "passwordDescription": "更新密码以保护账号安全。",
+        "passwordPlaceholder": "请输入密码"
+      },
+      "privacy": {
+        "dataExport": "数据导出",
+        "dataExportDescription": "下载系统中存储的全部个人数据副本。",
+        "dataExportBody": "申请一份包含个人资料、设置和活动历史的数据副本。",
+        "exportMeta": "格式：JSON · 上次导出：从未",
+        "exporting": "正在导出...",
+        "exportData": "导出数据",
+        "cookiePreferences": "Cookie 偏好",
+        "cookieDescription": "管理我们如何使用 Cookie 改善你的体验。",
+        "necessaryCookies": "必要 Cookie",
+        "necessaryCookiesDescription": "网站正常运行所必需",
+        "functionalCookies": "功能 Cookie",
+        "functionalCookiesDescription": "记住你的偏好和设置",
+        "analyticsCookies": "分析 Cookie",
+        "analyticsCookiesDescription": "帮助我们了解你如何使用网站",
+        "marketingCookies": "营销 Cookie",
+        "marketingCookiesDescription": "用于提供个性化广告",
+        "savePreferences": "保存偏好",
+        "deleteAccount": "删除账号",
+        "deleteDescription": "永久删除你的账号及所有关联数据。",
+        "deleteBody": "删除账号后无法恢复，请谨慎确认。",
+        "deletePointData": "你的所有数据将被永久删除",
+        "deletePointAccess": "你将失去所有服务访问权限",
+        "deletePointUndo": "此操作无法撤销",
+        "deleteConfirm": "你确定要删除账号吗？此操作无法撤销，所有数据都将被永久删除。"
+      }
+    }
+  }
 }

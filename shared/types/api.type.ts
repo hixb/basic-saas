@@ -45,7 +45,7 @@ export interface ApiResponseWithMeta<T = unknown> extends ApiResponse<T> {
  */
 export const ResponseCode = {
   /** Success */
-  SUCCESS: 200,
+  SUCCESS: 0,
 
   /** Bad request */
   BAD_REQUEST: 1000,
@@ -63,6 +63,10 @@ export const ResponseCode = {
   RATE_LIMITED: 1006,
   /** Payload too large */
   PAYLOAD_TOO_LARGE: 1007,
+  /** Invalid form input */
+  INVALID_FORM_INPUT: 1100,
+  /** Sensitive content detected */
+  SENSITIVE_CONTENT_DETECTED: 1101,
 
   /** Internal server error */
   INTERNAL_ERROR: 5000,
@@ -75,3 +79,21 @@ export const ResponseCode = {
 } as const
 
 export type ResponseCodeType = (typeof ResponseCode)[keyof typeof ResponseCode]
+
+export type ValidationErrorReason
+  = | 'required'
+    | 'too_small'
+    | 'too_big'
+    | 'invalid_email'
+    | 'invalid_url'
+    | 'invalid_type'
+    | 'sensitive_content'
+    | 'unknown'
+
+export interface ValidationErrorData {
+  reason: ValidationErrorReason
+  field?: string
+  min?: number
+  max?: number
+  matches?: string[]
+}

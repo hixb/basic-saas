@@ -1,4 +1,653 @@
 {
   "hello": "Hello",
-  "name": "Hello {name}"
+  "name": "Hello {name}",
+  "switcher": {
+    "language": {
+      "title": "Select language",
+      "ariaLabel": "Language selection"
+    },
+    "theme": {
+      "title": "Select theme",
+      "ariaLabel": "Theme selection",
+      "light": "Light theme",
+      "dark": "Dark theme",
+      "system": "System theme"
+    }
+  },
+  "home": {
+    "brand": "CargoPilot",
+    "nav": {
+      "features": "Features",
+      "materials": "Materials",
+      "faq": "FAQ",
+      "admin": "Admin login",
+      "platform": "Platform",
+      "specialties": "Specialties",
+      "insights": "Insights",
+      "contact": "Contact"
+    },
+    "hero": {
+      "badge": "Cross-border commerce command center",
+      "title": "The operating platform for cross-border commerce teams.",
+      "description": "Make every marketplace launch, logistics handoff, and compliance review easier to coordinate with one shared operating layer.",
+      "primary": "Book a review",
+      "secondary": "Explore resources",
+      "panelLabel": "Live route intelligence",
+      "panelTitle": "Marketplace readiness",
+      "panelStatus": "Healthy"
+    },
+    "metrics": {
+      "orders": "Orders orchestrated",
+      "countries": "Trade lanes covered",
+      "sla": "Platform uptime"
+    },
+    "features": {
+      "eyebrow": "Built for cross-border teams",
+      "title": "From listing to delivery, keep every market moving",
+      "catalog": {
+        "title": "Marketplace catalog control",
+        "description": "Centralize listing requirements, product files, and channel-ready attributes for Amazon, Shopify, TikTok Shop, and wholesale buyers."
+      },
+      "fulfillment": {
+        "title": "Fulfillment visibility",
+        "description": "Track prep work, shipping documents, warehouse handoffs, and route readiness before goods leave the origin market."
+      },
+      "compliance": {
+        "title": "Document review workflow",
+        "description": "Collect certificates, audit files, licenses, and product sheets so operations teams can review risk before launch."
+      }
+    },
+    "workflow": {
+      "eyebrow": "Operating flow",
+      "title": "A cleaner path from supplier files to marketplace launch",
+      "description": "Replace scattered spreadsheets and chat threads with a structured review process for stores, shipments, and product documents.",
+      "steps": {
+        "connect": {
+          "title": "Connect market context",
+          "description": "Capture channels, regions, product categories, and launch priorities in one structured intake."
+        },
+        "prepare": {
+          "title": "Prepare document packages",
+          "description": "Prepare licenses, product sheets, route notes, and compliance files inside the admin content workflow."
+        },
+        "ship": {
+          "title": "Launch with fewer surprises",
+          "description": "Give operations teams the information they need to route, approve, and prioritize cross-border work."
+        }
+      }
+    },
+    "materials": {
+      "eyebrow": "Seller resources",
+      "title": "Operational playbooks from the back office",
+      "description": "These resources are published by the admin team and displayed on the public site. Buyers and operators can open each content page for details.",
+      "cta": "Manage in admin",
+      "empty": "No published resources yet. Create and publish materials in the admin console."
+    },
+    "form": {
+      "eyebrow": "Open submission",
+      "title": "Request a cross-border operations review",
+      "description": "Anyone can submit a request. No portal password is required. Descriptions are checked against the admin-controlled sensitive word list.",
+      "name": "Contact name",
+      "company": "Company",
+      "email": "Work email",
+      "phone": "Phone",
+      "descriptionLabel": "Business description",
+      "descriptionPlaceholder": "Tell us about your sales channels, target markets, product category, fulfillment setup, and current blockers.",
+      "submit": "Submit request",
+      "success": "Request submitted successfully",
+      "points": {
+        "free": "Open to sellers, agencies, suppliers, and logistics teams.",
+        "response": "Admin reviewers can see every submission in the back office.",
+        "secure": "Sensitive descriptions are blocked before entering the review queue."
+      }
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Questions cross-border teams ask first",
+      "items": [
+        {
+          "question": "Who can submit the front-page form?",
+          "answer": "The form is open to all visitors. It only collects contact and business context, not a password."
+        },
+        {
+          "question": "Where do resource pages come from?",
+          "answer": "Resource cards are created and published by administrators. Visitors can read them, but they do not upload materials from the public site."
+        },
+        {
+          "question": "Where do submissions go?",
+          "answer": "Front-page inquiries are stored in the real database and displayed in the admin console."
+        },
+        {
+          "question": "How are sensitive descriptions handled?",
+          "answer": "The description is checked against the active sensitive-word list before the request is accepted."
+        }
+      ]
+    },
+    "channels": {
+      "label": "Built for marketplace, logistics, and supplier teams"
+    },
+    "quote": "“CargoPilot gives our operators one place to understand what is ready, what is blocked, and what needs to move before a launch date slips.”",
+    "specialties": {
+      "title": "Workflows designed for every trade lane.",
+      "items": {
+        "catalog": "Catalog operations",
+        "fulfillment": "Warehouse handoff",
+        "compliance": "Compliance review",
+        "analytics": "Launch intelligence"
+      }
+    },
+    "platform": {
+      "title": "A commerce residency layer that keeps sellers, suppliers, and logistics teams aligned.",
+      "cta": "Explore platform"
+    },
+    "footer": {
+      "description": "The trusted AI infrastructure for building and deploying cross-border commerce workflows.",
+      "platform": "Platform",
+      "connect": "Connect"
+    }
+  },
+  "details": {
+    "eyebrow": "Resource detail",
+    "back": "Back to resources",
+    "download": "Open attachment",
+    "empty": {
+      "title": "No published resource selected",
+      "description": "Open a resource from the home page. Only materials published by the admin team can be viewed here.",
+      "back": "Back to home"
+    },
+    "insights": [
+      "Marketplace-ready context",
+      "Fulfillment handoff notes",
+      "Compliance review guidance"
+    ],
+    "sidebar": {
+      "title": "What this resource helps with",
+      "points": {
+        "platform": "Clarify marketplace requirements before listing work begins.",
+        "fulfillment": "Align warehouse, carrier, and document handoffs.",
+        "compliance": "Keep risk notes visible for operators and reviewers."
+      }
+    }
+  },
+  "admin": {
+    "nav": {
+      "brand": "Admin",
+      "dashboard": "Dashboard",
+      "users": "Users",
+      "materials": "Materials",
+      "materialCategories": "Material Categories",
+      "inquiries": "Inquiries",
+      "sensitiveWords": "Sensitive Words",
+      "personalCenter": "Personal Center",
+      "settings": "Settings",
+      "signOut": "Sign out",
+      "adminUser": "Admin User",
+      "search": "Search..."
+    },
+    "pages": {
+      "dashboard": {
+        "title": "Dashboard",
+        "description": "Monitor inquiry intake, published resources, screening coverage, and admin activity from live database records."
+      },
+      "users": {
+        "title": "User Management",
+        "description": "Monitor and manage all registered platform users."
+      },
+      "materials": {
+        "title": "Content Materials",
+        "description": "Create and publish public resource pages shown on the storefront."
+      },
+      "materialCategories": {
+        "title": "Material Categories",
+        "description": "Manage the category options available when creating content materials."
+      },
+      "inquiries": {
+        "title": "Customer Inquiries",
+        "description": "Track public inquiry submissions and sensitive-word screening results."
+      },
+      "sensitiveWords": {
+        "title": "Sensitive Words",
+        "description": "Control blocked terms used to validate public inquiry descriptions."
+      },
+      "settings": {
+        "title": "Settings",
+        "description": "Manage profile, security, and notification preferences."
+      }
+    },
+    "crud": {
+      "actions": "Actions",
+      "noResults": "No results found",
+      "rowsPerPage": "Rows per page",
+      "pageSummary": "{start} to {end} of {total} results",
+      "previous": "Previous",
+      "next": "Next",
+      "selectAll": "Select all",
+      "selectRow": "Select row",
+      "deleteSelected": "Delete selected",
+      "filters": "Filters",
+      "openFilters": "Open filters",
+      "closeFilters": "Close filters",
+      "refresh": "Refresh the list",
+      "export": "Export",
+      "cancel": "Cancel",
+      "create": "Create",
+      "save": "Save"
+    },
+    "status": {
+      "draft": "Draft",
+      "published": "Published",
+      "archived": "Archived",
+      "active": "Active",
+      "disabled": "Disabled"
+    },
+    "topbar": {
+      "pin": "Pin",
+      "unpin": "Unpin",
+      "remove": "Remove"
+    },
+    "login": {
+      "title": "Welcome back",
+      "description": "Sign in to your {siteName} admin account to continue",
+      "email": "Email",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "rememberEmail": "Remember email",
+      "submit": "Submit"
+    },
+    "dashboard": {
+      "metrics": {
+        "totalInquiries": "Total inquiries",
+        "totalInquiriesDescription": "All public form submissions stored in the database.",
+        "newInquiries": "New inquiries",
+        "newInquiriesDescription": "Submissions waiting for admin review.",
+        "publishedMaterials": "Published materials",
+        "publishedMaterialsDescription": "{total} total material records across all statuses.",
+        "sensitiveHits": "Sensitive hits",
+        "sensitiveHitsDescription": "Submissions blocked or flagged by active sensitive words.",
+        "activeCategories": "Active categories",
+        "activeCategoriesDescription": "Categories available when publishing resources.",
+        "activeSensitiveWords": "Active sensitive words",
+        "activeSensitiveWordsDescription": "Terms currently used to screen public descriptions.",
+        "activeUsers": "Active admins",
+        "activeUsersDescription": "Enabled users who can access the back office.",
+        "archivedMaterials": "Archived materials",
+        "archivedMaterialsDescription": "Resources removed from public display."
+      },
+      "charts": {
+        "inquiryTrend": "Inquiry trend",
+        "inquiryTrendDescription": "Seven-day volume with sensitive-word hits.",
+        "inquiries": "Inquiries",
+        "sensitiveHits": "Sensitive hits",
+        "countryDistribution": "Visitor locations",
+        "countryDistributionDescription": "Top countries captured from the inquiry geo lookup.",
+        "materialStatus": "Material status",
+        "materialStatusDescription": "How content records are distributed by publishing status.",
+        "sensitiveSeverity": "Sensitive word severity",
+        "sensitiveSeverityDescription": "Active sensitive terms grouped by severity."
+      },
+      "recent": {
+        "title": "Recent inquiries",
+        "description": "Latest public submissions with location and screening state.",
+        "unknownLocation": "Unknown location"
+      },
+      "empty": {
+        "countries": "No geo location data has been captured yet.",
+        "inquiries": "No inquiry submissions have been stored yet."
+      }
+    },
+    "formErrors": {
+      "required": "Please complete {field}.",
+      "tooSmall": "{field} must be at least {min} characters.",
+      "tooBig": "{field} must be no more than {max} characters.",
+      "invalidEmail": "Please enter a valid email address.",
+      "invalidUrl": "Please enter a valid URL for {field}.",
+      "unknown": "Save failed. Please check the form and try again.",
+      "fields": {
+        "form": "the form"
+      }
+    },
+    "materials": {
+      "actions": {
+        "create": "New material"
+      },
+      "columns": {
+        "title": "Title",
+        "summary": "Summary",
+        "category": "Category",
+        "content": "Content",
+        "file": "Attachment",
+        "size": "Size",
+        "status": "Status",
+        "createdAt": "Created At"
+      },
+      "categories": {
+        "marketplace": "Marketplace",
+        "logistics": "Logistics",
+        "compliance": "Compliance",
+        "playbook": "Playbook"
+      },
+      "form": {
+        "createTitle": "New Material",
+        "editTitle": "Edit Material",
+        "title": "Title",
+        "summary": "Summary",
+        "category": "Category",
+        "content": "Content",
+        "cover": "Cover",
+        "attachment": "Attachment",
+        "noFile": "No file uploaded",
+        "status": "Status",
+        "uploadCover": "Upload cover",
+        "uploadFile": "Upload attachment",
+        "uploaded": "File uploaded",
+        "insertAsset": "Insert asset",
+        "markdownImages": "Images",
+        "markdownVideos": "Videos",
+        "markdownFiles": "Files"
+      },
+      "editor": {
+        "createPageTitle": "New Content Material",
+        "createPageDescription": "Write a full public resource page with category, cover, Markdown content, and publishing status.",
+        "editPageTitle": "Edit Content Material",
+        "editPageDescription": "Update an existing public resource with Markdown content, assets, and publishing state.",
+        "backToList": "Back to materials",
+        "loading": "Loading material...",
+        "loadFailed": "Material could not be loaded",
+        "created": "Material created successfully",
+        "updated": "Material saved successfully",
+        "basicInfo": "Basic information",
+        "basicInfoDescription": "These fields drive list display, detail-page summaries, and admin search.",
+        "markdownContent": "Markdown content",
+        "markdownContentDescription": "Insert images, videos, and attachment links. The public detail page renders this Markdown.",
+        "assets": "Cover and attachment",
+        "assetsDescription": "The cover appears in listings and detail pages. Attachments can be stored as supporting files.",
+        "publishChecklist": "Publishing checklist",
+        "checkTitle": "Title and summary are clear",
+        "checkCategory": "Correct category selected",
+        "checkContent": "Content contains readable operational guidance"
+      },
+      "validation": {
+        "title": "Title is required",
+        "summary": "Summary is required",
+        "content": "Content is required"
+      }
+    },
+    "users": {
+      "columns": {
+        "username": "Username",
+        "nickname": "Nickname",
+        "email": "Email",
+        "status": "Status",
+        "createdAt": "Created At"
+      },
+      "stats": {
+        "total": "Total users",
+        "totalSubtext": "All registered users",
+        "active": "Active users",
+        "activeSubtext": "{percent}% of total",
+        "disabled": "Disabled users",
+        "disabledSubtext": "Access currently disabled",
+        "newThisMonth": "New this month",
+        "newThisMonthSubtext": "Registered this month"
+      }
+    },
+    "settings": {
+      "tabs": {
+        "ariaLabel": "Settings sections",
+        "profile": "Profile",
+        "security": "Security",
+        "notifications": "Notifications"
+      },
+      "actions": {
+        "saved": "Saved",
+        "updated": "Updated",
+        "saveChanges": "Save changes",
+        "updatePassword": "Update password",
+        "revoke": "Revoke"
+      },
+      "profile": {
+        "avatarAlt": "Profile",
+        "changePhoto": "Change photo",
+        "removePhoto": "Remove",
+        "personalInformation": "Personal information",
+        "firstName": "First name",
+        "firstNamePlaceholder": "First name",
+        "lastName": "Last name",
+        "lastNamePlaceholder": "Last name",
+        "emailAddress": "Email address",
+        "emailDescription": "Email cannot be changed. Contact support if needed.",
+        "bio": "Bio",
+        "bioPlaceholder": "Write a short description about yourself..."
+      },
+      "security": {
+        "changePassword": "Change password",
+        "currentPassword": "Current password",
+        "currentPasswordPlaceholder": "Enter your current password",
+        "newPassword": "New password",
+        "newPasswordPlaceholder": "At least 8 characters",
+        "confirmPassword": "Confirm password",
+        "confirmPasswordPlaceholder": "Repeat new password",
+        "toggleVisibility": "Toggle visibility",
+        "twoFactor": "Two-factor authentication",
+        "twoFactorEnabled": "Your account is protected with a second verification step.",
+        "twoFactorDisabled": "Require a code alongside your password when signing in.",
+        "setupTwoFactor": "Set up two-factor authentication",
+        "confirmEnable": "Confirm and enable",
+        "twoFactorQrTitle": "Two-factor authentication QR code",
+        "scanTitle": "Scan with your app",
+        "scanDescription": "Open Google Authenticator, Authy, or any TOTP-compatible app and scan the QR code.",
+        "manualKey": "Can't scan? Enter this key manually",
+        "otpLabel": "Enter the 6-digit code from your app",
+        "activeSessions": "Active sessions",
+        "current": "Current",
+        "sessions": {
+          "mac": "Shanghai · Chrome 122 · 2 min ago",
+          "iphone": "Shanghai · Safari 17 · 3 hours ago",
+          "windows": "Beijing · Edge 121 · 2 days ago"
+        },
+        "strength": {
+          "tooWeak": "Too weak",
+          "weak": "Weak",
+          "fair": "Fair",
+          "good": "Good",
+          "strong": "Strong"
+        }
+      },
+      "notifications": {
+        "emailNotifications": "Email notifications",
+        "emailDescription": "Sent to admin@example.com.",
+        "pushNotifications": "Push notifications",
+        "pushDescription": "Browser and mobile push alert preferences.",
+        "loginAlerts": "Login alerts",
+        "loginAlertsDescription": "Get notified whenever a new sign-in is detected on your account.",
+        "securityUpdates": "Security updates",
+        "securityUpdatesDescription": "Critical security announcements and important policy changes.",
+        "productUpdates": "Product updates",
+        "productUpdatesDescription": "New features, improvements and release notes from the team.",
+        "realtimeAlerts": "Real-time alerts",
+        "realtimeAlertsDescription": "Instant push notifications for critical system events.",
+        "weeklyDigest": "Weekly digest",
+        "weeklyDigestDescription": "A curated weekly summary of activity in your account."
+      }
+    },
+    "materialCategories": {
+      "actions": {
+        "create": "New category"
+      },
+      "columns": {
+        "name": "Name",
+        "slug": "Slug",
+        "description": "Description",
+        "status": "Status",
+        "createdAt": "Created At"
+      },
+      "form": {
+        "createTitle": "New Material Category",
+        "editTitle": "Edit Material Category",
+        "name": "Name",
+        "slug": "Slug",
+        "description": "Description",
+        "status": "Status"
+      },
+      "validation": {
+        "name": "Category name is required",
+        "slug": "Category slug is required"
+      }
+    },
+    "inquiries": {
+      "columns": {
+        "contact": "Contact",
+        "company": "Company",
+        "email": "Email",
+        "phone": "Phone",
+        "location": "Location",
+        "description": "Description",
+        "sensitive": "Sensitive",
+        "status": "Status",
+        "createdAt": "Created At"
+      },
+      "geo": {
+        "ip": "IP",
+        "countryCode": "Country code",
+        "region": "Region",
+        "country": "Country",
+        "city": "City",
+        "emoji": "Flag"
+      },
+      "sensitive": {
+        "hit": "Hit",
+        "clean": "Clean"
+      }
+    },
+    "sensitiveWords": {
+      "actions": {
+        "create": "New word"
+      },
+      "columns": {
+        "word": "Word",
+        "severity": "Severity",
+        "status": "Status",
+        "note": "Note",
+        "createdAt": "Created At"
+      },
+      "severity": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "form": {
+        "createTitle": "New Sensitive Word",
+        "editTitle": "Edit Sensitive Word",
+        "word": "Word",
+        "severity": "Severity",
+        "status": "Status",
+        "note": "Note"
+      },
+      "validation": {
+        "word": "Word is required"
+      }
+    }
+  },
+  "contact": {
+    "back": "Back to home",
+    "title": "Let us understand your cross-border operating model.",
+    "description": "Share your channels, regions, product categories, and current blockers. The admin team will review the request inside the back office.",
+    "placeholders": {
+      "contactName": "Jane Cooper",
+      "companyName": "Northstar Supply"
+    },
+    "errors": {
+      "required": "Please complete {field}.",
+      "tooSmall": "{field} must be at least {min} characters.",
+      "tooBig": "{field} must be no more than {max} characters.",
+      "invalidEmail": "Please enter a valid email address.",
+      "invalidUrl": "Please enter a valid URL for {field}.",
+      "sensitiveContent": "The business description contains blocked content. Please revise it and submit again.",
+      "unknown": "Submission failed. Please check the form and try again.",
+      "fields": {
+        "form": "the form",
+        "contactName": "contact name",
+        "companyName": "company",
+        "email": "email",
+        "phone": "phone",
+        "description": "business description"
+      }
+    }
+  },
+  "member": {
+    "pages": {
+      "settings": {
+        "title": "Settings",
+        "description": "Customize settings, email preferences, and web appearance."
+      }
+    },
+    "settings": {
+      "tabs": {
+        "ariaLabel": "Options",
+        "profile": "Profile",
+        "security": "Security",
+        "billing": "Billing & Subscription",
+        "privacy": "Privacy & Data"
+      },
+      "actions": {
+        "save": "Save",
+        "update": "Update",
+        "cancel": "Cancel"
+      },
+      "profile": {
+        "title": "Profile",
+        "description": "Upload and manage your profile picture visible to other users.",
+        "username": "Username",
+        "usernameDescription": "Your unique username for identification across the platform.",
+        "usernamePlaceholder": "Enter your username",
+        "personalProfile": "Personal profile",
+        "personalProfileDescription": "Add a brief description about yourself to share with others.",
+        "personalProfileAria": "Enter your personal profile",
+        "personalProfilePlaceholder": "Enter your personal profile",
+        "timezone": "Timezone",
+        "timezoneDescription": "Select your timezone for accurate time display",
+        "searchTimezone": "Search timezone...",
+        "loadingTimezones": "Loading timezones...",
+        "noResults": "No results",
+        "noTimezones": "No timezones found",
+        "loadingMore": "Loading more..."
+      },
+      "billing": {
+        "paymentMethod": "Payment method"
+      },
+      "security": {
+        "password": "Password",
+        "passwordDescription": "Update your password to keep your account secure.",
+        "passwordPlaceholder": "Enter your password"
+      },
+      "privacy": {
+        "dataExport": "Data export",
+        "dataExportDescription": "Download a copy of all your personal data stored in our system.",
+        "dataExportBody": "Request a copy of your data including profile information, settings, and activity history.",
+        "exportMeta": "Format: JSON · Last exported: Never",
+        "exporting": "Exporting...",
+        "exportData": "Export data",
+        "cookiePreferences": "Cookie preferences",
+        "cookieDescription": "Manage how we use cookies to improve your experience.",
+        "necessaryCookies": "Necessary cookies",
+        "necessaryCookiesDescription": "Required for the website to function properly",
+        "functionalCookies": "Functional cookies",
+        "functionalCookiesDescription": "Remember your preferences and settings",
+        "analyticsCookies": "Analytics cookies",
+        "analyticsCookiesDescription": "Help us understand how you use our site",
+        "marketingCookies": "Marketing cookies",
+        "marketingCookiesDescription": "Used to deliver personalized advertisements",
+        "savePreferences": "Save preferences",
+        "deleteAccount": "Delete account",
+        "deleteDescription": "Permanently delete your account and all associated data.",
+        "deleteBody": "Once you delete your account, there is no going back. Please be certain.",
+        "deletePointData": "All your data will be permanently deleted",
+        "deletePointAccess": "You will lose access to all services",
+        "deletePointUndo": "This action cannot be undone",
+        "deleteConfirm": "Are you absolutely sure you want to delete your account? This action cannot be undone and all your data will be permanently deleted."
+      }
+    }
+  }
 }

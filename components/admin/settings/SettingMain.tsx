@@ -22,6 +22,7 @@ import { Bell, Camera, Check, CheckCheck, Copy, Eye, EyeOff, KeyRound, Laptop, M
 import { QRCodeSVG } from 'qrcode.react'
 import { useCallback, useRef, useState } from 'react'
 import { Popup } from '~/context/usePopupContext'
+import { useTypedTranslations } from '~/hooks/useTypedTranslations'
 import { cn } from '~/lib/utils/tools'
 
 function getStrength(pw: string): 0 | 1 | 2 | 3 | 4 {
@@ -39,15 +40,16 @@ function getStrength(pw: string): 0 | 1 | 2 | 3 | 4 {
   return s as 0 | 1 | 2 | 3 | 4
 }
 
-const STRENGTH_META: Record<number, { label: string, color: string, text: string }> = {
-  0: { label: 'Too Weak', color: 'bg-danger', text: 'text-danger' },
-  1: { label: 'Weak', color: 'bg-danger', text: 'text-danger' },
-  2: { label: 'Fair', color: 'bg-warning', text: 'text-warning' },
-  3: { label: 'Good', color: 'bg-success/70', text: 'text-success' },
-  4: { label: 'Strong', color: 'bg-success', text: 'text-success' },
+const STRENGTH_META: Record<number, { labelKey: string, color: string, text: string }> = {
+  0: { labelKey: 'common.admin.settings.security.strength.tooWeak', color: 'bg-danger', text: 'text-danger' },
+  1: { labelKey: 'common.admin.settings.security.strength.weak', color: 'bg-danger', text: 'text-danger' },
+  2: { labelKey: 'common.admin.settings.security.strength.fair', color: 'bg-warning', text: 'text-warning' },
+  3: { labelKey: 'common.admin.settings.security.strength.good', color: 'bg-success/70', text: 'text-success' },
+  4: { labelKey: 'common.admin.settings.security.strength.strong', color: 'bg-success', text: 'text-success' },
 }
 
 function PasswordStrengthBar({ password }: { password: string }) {
+  const t = useTypedTranslations()
   const strength = getStrength(password)
 
   if (!password)
@@ -65,12 +67,13 @@ function PasswordStrengthBar({ password }: { password: string }) {
           />
         ))}
       </div>
-      <p className={cn('text-xs font-medium', meta.text)}>{meta.label}</p>
+      <p className={cn('text-xs font-medium', meta.text)}>{t(meta.labelKey as any)}</p>
     </div>
   )
 }
 
 function ProfileSection() {
+  const t = useTypedTranslations()
   const [avatarSrc, setAvatarSrc] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
@@ -91,7 +94,7 @@ function ProfileSection() {
     setTimeout(() => {
       setIsSaving(false)
       setSaved(true)
-      setTimeout(() => setSaved(false), 2500)
+      setTimeout(setSaved, 2500, false)
     }, 1200)
   }
 
@@ -107,7 +110,7 @@ function ProfileSection() {
             >
               <Avatar className="size-20 ring-4 ring-background shadow-md">
                 <Avatar.Image
-                  alt="Profile"
+                  alt={t('common.admin.settings.profile.avatarAlt')}
                   src={avatarSrc ?? 'https://img.heroui.chat/image/avatar?w=200&h=200&u=1'}
                 />
                 <Avatar.Fallback>AU</Avatar.Fallback>
@@ -117,17 +120,17 @@ function ProfileSection() {
               </div>
             </div>
             <div className="text-center">
-              <p className="text-sm font-semibold text-foreground">Admin User</p>
+              <p className="text-sm font-semibold text-foreground">{t('common.admin.nav.adminUser')}</p>
               <p className="mt-0.5 text-xs text-muted">admin@example.com</p>
             </div>
             <div className="flex gap-2">
               <Button onPress={() => fileRef.current?.click()} size="sm" variant="secondary">
                 <Camera className="size-3.5" />
-                Change Photo
+                {t('common.admin.settings.profile.changePhoto')}
               </Button>
               {avatarSrc && (
                 <Button onPress={() => setAvatarSrc(null)} size="sm" variant="tertiary">
-                  Remove
+                  {t('common.admin.settings.profile.removePhoto')}
                 </Button>
               )}
             </div>
@@ -141,38 +144,38 @@ function ProfileSection() {
             <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-surface-secondary">
               <User className="size-4 text-muted" />
             </div>
-            <Card.Title>Personal Information</Card.Title>
+            <Card.Title>{t('common.admin.settings.profile.personalInformation')}</Card.Title>
           </div>
         </Card.Header>
         <Card.Content>
           <Form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div className="grid gap-4 sm:grid-cols-2">
               <TextField defaultValue="Admin" fullWidth name="firstName">
-                <Label>First Name</Label>
+                <Label>{t('common.admin.settings.profile.firstName')}</Label>
                 <InputGroup variant="secondary">
-                  <InputGroup.Input placeholder="First name" />
+                  <InputGroup.Input placeholder={t('common.admin.settings.profile.firstNamePlaceholder')} />
                 </InputGroup>
                 <FieldError />
               </TextField>
               <TextField defaultValue="User" fullWidth name="lastName">
-                <Label>Last Name</Label>
+                <Label>{t('common.admin.settings.profile.lastName')}</Label>
                 <InputGroup variant="secondary">
-                  <InputGroup.Input placeholder="Last name" />
+                  <InputGroup.Input placeholder={t('common.admin.settings.profile.lastNamePlaceholder')} />
                 </InputGroup>
                 <FieldError />
               </TextField>
             </div>
             <TextField defaultValue="admin@example.com" fullWidth isDisabled name="email" type="email">
-              <Label>Email Address</Label>
+              <Label>{t('common.admin.settings.profile.emailAddress')}</Label>
               <InputGroup variant="secondary">
                 <InputGroup.Input />
               </InputGroup>
-              <Description>Email cannot be changed. Contact support if needed.</Description>
+              <Description>{t('common.admin.settings.profile.emailDescription')}</Description>
             </TextField>
             <TextField fullWidth name="bio">
-              <Label>Bio</Label>
+              <Label>{t('common.admin.settings.profile.bio')}</Label>
               <InputGroup variant="secondary">
-                <InputGroup.TextArea className="h-32" placeholder="Write a short description about yourself..." />
+                <InputGroup.TextArea className="h-32" placeholder={t('common.admin.settings.profile.bioPlaceholder')} />
               </InputGroup>
             </TextField>
           </Form>
@@ -181,14 +184,14 @@ function ProfileSection() {
           {saved && (
             <span className="flex items-center gap-1.5 text-xs font-medium text-success">
               <Check className="size-3.5" />
-              Saved
+              {t('common.admin.settings.actions.saved')}
             </span>
           )}
           <Button isPending={isSaving} onPress={() => (document.querySelector('form') as HTMLFormElement)?.requestSubmit()}>
             {({ isPending }) => (
               <>
                 {isPending && <Spinner color="current" size="sm" />}
-                Save Changes
+                {t('common.admin.settings.actions.saveChanges')}
               </>
             )}
           </Button>
@@ -201,13 +204,14 @@ function ProfileSection() {
 const TWO_FA_SECRET = 'JBSW Y3DP EHPK 3PXP'
 
 function TwoFactorSetupContent() {
+  const t = useTypedTranslations()
   const [code, setCode] = useState('')
   const [copied, setCopied] = useState(false)
 
   const handleCopy = () => {
     navigator.clipboard.writeText(TWO_FA_SECRET.replace(/\s/g, ''))
     setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    setTimeout(setCopied, 2000, false)
   }
 
   return (
@@ -219,21 +223,21 @@ function TwoFactorSetupContent() {
             fgColor="var(--foreground)"
             level="L"
             size={128}
-            title="Title for my QR Code"
+            title={t('common.admin.settings.security.twoFactorQrTitle')}
             value="https://picturesofpeoplescanningqrcodes.tumblr.com/"
           />
         </div>
 
         <div className="flex flex-1 flex-col justify-between gap-3">
           <div>
-            <p className="text-sm font-medium text-foreground">Scan with your app</p>
+            <p className="text-sm font-medium text-foreground">{t('common.admin.settings.security.scanTitle')}</p>
             <p className="mt-1 text-xs leading-relaxed text-muted">
-              Open Google Authenticator, Authy, or any TOTP-compatible app and scan the QR code.
+              {t('common.admin.settings.security.scanDescription')}
             </p>
           </div>
 
           <div className="rounded-lg bg-surface-secondary px-3 py-2.5">
-            <p className="text-[11px] text-muted">Can't scan? Enter this key manually</p>
+            <p className="text-[11px] text-muted">{t('common.admin.settings.security.manualKey')}</p>
             <div className="mt-1 flex items-center justify-between gap-2">
               <code className="text-xs font-mono tracking-wider text-foreground">{TWO_FA_SECRET}</code>
               <Button
@@ -253,7 +257,7 @@ function TwoFactorSetupContent() {
       <Separator />
 
       <div className="flex flex-col gap-1.5">
-        <Label>Enter the 6-digit code from your app</Label>
+        <Label>{t('common.admin.settings.security.otpLabel')}</Label>
         <InputOTP className="p-1" maxLength={6} onChange={setCode} pattern={REGEXP_ONLY_DIGITS} value={code} variant="secondary">
           <InputOTP.Group>
             <InputOTP.Slot index={0} />
@@ -273,20 +277,23 @@ function TwoFactorSetupContent() {
 }
 
 function EyeToggle({ isShown, onToggle }: { isShown: boolean, onToggle: () => void }) {
+  const t = useTypedTranslations()
+
   return (
-    <Button aria-label="Toggle visibility" className="size-7" onPress={onToggle} size="sm" variant="ghost">
+    <Button aria-label={t('common.admin.settings.security.toggleVisibility')} className="size-7" onPress={onToggle} size="sm" variant="ghost">
       {isShown ? <EyeOff size={14} /> : <Eye size={14} />}
     </Button>
   )
 }
 
 const SESSIONS = [
-  { device: 'MacBook Pro 16"', meta: 'Shanghai · Chrome 122 · 2 min ago', Icon: Laptop, current: true },
-  { device: 'iPhone 15 Pro', meta: 'Shanghai · Safari 17 · 3 hours ago', Icon: Smartphone, current: false },
-  { device: 'Windows PC', meta: 'Beijing · Edge 121 · 2 days ago', Icon: Laptop, current: false },
+  { device: 'MacBook Pro 16"', metaKey: 'common.admin.settings.security.sessions.mac', Icon: Laptop, current: true },
+  { device: 'iPhone 15 Pro', metaKey: 'common.admin.settings.security.sessions.iphone', Icon: Smartphone, current: false },
+  { device: 'Windows PC', metaKey: 'common.admin.settings.security.sessions.windows', Icon: Laptop, current: false },
 ]
 
 function SecuritySection() {
+  const t = useTypedTranslations()
   const [show, setShow] = useState({ current: false, newPw: false, confirm: false })
   const [newPassword, setNewPassword] = useState('')
   const [isSaving, setIsSaving] = useState(false)
@@ -303,7 +310,7 @@ function SecuritySection() {
       setIsSaving(false)
       setSaved(true)
       setNewPassword('')
-      setTimeout(() => setSaved(false), 2500)
+      setTimeout(setSaved, 2500, false)
     }, 1200)
   }
 
@@ -312,15 +319,15 @@ function SecuritySection() {
 
     if (isSelected) {
       Popup.ActionDialog.visible({
-        title: 'Set Up Two-Factor Authentication',
+        title: t('common.admin.settings.security.setupTwoFactor'),
         content: <TwoFactorSetupContent />,
-        confirmText: 'Confirm & Enable',
+        confirmText: t('common.admin.settings.security.confirmEnable'),
         onConfirm: async () => {},
         size: 'lg',
         status: 'accent',
       })
     }
-  }, [twoFa, setTwoFa])
+  }, [t])
 
   return (
     <div className="flex flex-col gap-4">
@@ -330,15 +337,15 @@ function SecuritySection() {
             <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-surface-secondary">
               <KeyRound className="size-4 text-muted" />
             </div>
-            <Card.Title>Change Password</Card.Title>
+            <Card.Title>{t('common.admin.settings.security.changePassword')}</Card.Title>
           </div>
         </Card.Header>
         <Card.Content>
           <Form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <TextField fullWidth isRequired name="currentPassword" type={show.current ? 'text' : 'password'}>
-              <Label>Current Password</Label>
+              <Label>{t('common.admin.settings.security.currentPassword')}</Label>
               <InputGroup variant="secondary">
-                <InputGroup.Input placeholder="Enter your current password" />
+                <InputGroup.Input placeholder={t('common.admin.settings.security.currentPasswordPlaceholder')} />
                 <InputGroup.Suffix><EyeToggle isShown={show.current} onToggle={() => toggleShow('current')} /></InputGroup.Suffix>
               </InputGroup>
               <FieldError />
@@ -347,9 +354,9 @@ function SecuritySection() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="flex flex-col gap-2">
                 <TextField fullWidth isRequired minLength={8} name="newPassword" onChange={setNewPassword} type={show.newPw ? 'text' : 'password'} value={newPassword}>
-                  <Label>New Password</Label>
+                  <Label>{t('common.admin.settings.security.newPassword')}</Label>
                   <InputGroup variant="secondary">
-                    <InputGroup.Input placeholder="At least 8 characters" />
+                    <InputGroup.Input placeholder={t('common.admin.settings.security.newPasswordPlaceholder')} />
                     <InputGroup.Suffix><EyeToggle isShown={show.newPw} onToggle={() => toggleShow('newPw')} /></InputGroup.Suffix>
                   </InputGroup>
                   <FieldError />
@@ -357,9 +364,9 @@ function SecuritySection() {
                 <PasswordStrengthBar password={newPassword} />
               </div>
               <TextField fullWidth isRequired name="confirmPassword" type={show.confirm ? 'text' : 'password'}>
-                <Label>Confirm Password</Label>
+                <Label>{t('common.admin.settings.security.confirmPassword')}</Label>
                 <InputGroup variant="secondary">
-                  <InputGroup.Input placeholder="Repeat new password" />
+                  <InputGroup.Input placeholder={t('common.admin.settings.security.confirmPasswordPlaceholder')} />
                   <InputGroup.Suffix><EyeToggle isShown={show.confirm} onToggle={() => toggleShow('confirm')} /></InputGroup.Suffix>
                 </InputGroup>
                 <FieldError />
@@ -371,14 +378,14 @@ function SecuritySection() {
           {saved && (
             <span className="flex items-center gap-1.5 text-xs font-medium text-success">
               <Check className="size-3.5" />
-              Updated
+              {t('common.admin.settings.actions.updated')}
             </span>
           )}
           <Button isPending={isSaving} onPress={() => (document.querySelector('[name=currentPassword]')?.closest('form') as HTMLFormElement)?.requestSubmit()}>
             {({ isPending }) => (
               <>
                 {isPending && <Spinner color="current" size="sm" />}
-                Update Password
+                {t('common.admin.settings.actions.updatePassword')}
               </>
             )}
           </Button>
@@ -393,11 +400,11 @@ function SecuritySection() {
                 <Shield className="size-4 text-muted" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-foreground">Two-Factor Authentication</p>
+                <p className="text-sm font-semibold text-foreground">{t('common.admin.settings.security.twoFactor')}</p>
                 <p className="mt-0.5 text-xs text-muted">
                   {twoFa
-                    ? 'Your account is protected with a second verification step.'
-                    : 'Require a code alongside your password when signing in.'}
+                    ? t('common.admin.settings.security.twoFactorEnabled')
+                    : t('common.admin.settings.security.twoFactorDisabled')}
                 </p>
               </div>
             </div>
@@ -410,7 +417,7 @@ function SecuritySection() {
 
       <Card>
         <Card.Header>
-          <Card.Title>Active Sessions</Card.Title>
+          <Card.Title>{t('common.admin.settings.security.activeSessions')}</Card.Title>
         </Card.Header>
         <Card.Content className="flex flex-col">
           {SESSIONS.map((s, i) => (
@@ -426,15 +433,15 @@ function SecuritySection() {
                       <p className="text-sm font-medium text-foreground">{s.device}</p>
                       {s.current && (
                         <span className="rounded-full bg-success/10 px-2 py-px text-xs font-medium text-success">
-                          Current
+                          {t('common.admin.settings.security.current')}
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-muted">{s.meta}</p>
+                    <p className="text-xs text-muted">{t(s.metaKey as any)}</p>
                   </div>
                 </div>
                 {!s.current && (
-                  <Button size="sm" variant="danger-soft">Revoke</Button>
+                  <Button size="sm" variant="danger-soft">{t('common.admin.settings.actions.revoke')}</Button>
                 )}
               </div>
             </div>
@@ -446,17 +453,18 @@ function SecuritySection() {
 }
 
 const EMAIL_ITEMS = [
-  { key: 'loginAlert', label: 'Login Alerts', desc: 'Get notified whenever a new sign-in is detected on your account.', Icon: Shield, default: true },
-  { key: 'securityUpdates', label: 'Security Updates', desc: 'Critical security announcements and important policy changes.', Icon: KeyRound, default: true },
-  { key: 'productNews', label: 'Product Updates', desc: 'New features, improvements and release notes from the team.', Icon: Mail, default: false },
+  { key: 'loginAlert', labelKey: 'common.admin.settings.notifications.loginAlerts', descKey: 'common.admin.settings.notifications.loginAlertsDescription', Icon: Shield, default: true },
+  { key: 'securityUpdates', labelKey: 'common.admin.settings.notifications.securityUpdates', descKey: 'common.admin.settings.notifications.securityUpdatesDescription', Icon: KeyRound, default: true },
+  { key: 'productNews', labelKey: 'common.admin.settings.notifications.productUpdates', descKey: 'common.admin.settings.notifications.productUpdatesDescription', Icon: Mail, default: false },
 ]
 
 const PUSH_ITEMS = [
-  { key: 'realtimeAlerts', label: 'Real-time Alerts', desc: 'Instant push notifications for critical system events.', Icon: Bell, default: true },
-  { key: 'weeklyDigest', label: 'Weekly Digest', desc: 'A curated weekly summary of activity in your account.', Icon: Mail, default: false },
+  { key: 'realtimeAlerts', labelKey: 'common.admin.settings.notifications.realtimeAlerts', descKey: 'common.admin.settings.notifications.realtimeAlertsDescription', Icon: Bell, default: true },
+  { key: 'weeklyDigest', labelKey: 'common.admin.settings.notifications.weeklyDigest', descKey: 'common.admin.settings.notifications.weeklyDigestDescription', Icon: Mail, default: false },
 ]
 
 function NotificationsSection() {
+  const t = useTypedTranslations()
   const [settings, setSettings] = useState<Record<string, boolean>>(
     Object.fromEntries([...EMAIL_ITEMS, ...PUSH_ITEMS].map(i => [i.key, i.default])),
   )
@@ -472,8 +480,8 @@ function NotificationsSection() {
               <item.Icon className="size-4 text-muted" />
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-foreground">{item.label}</p>
-              <p className="mt-0.5 text-xs text-muted leading-relaxed">{item.desc}</p>
+              <p className="text-sm font-medium text-foreground">{t(item.labelKey as any)}</p>
+              <p className="mt-0.5 text-xs text-muted leading-relaxed">{t(item.descKey as any)}</p>
             </div>
           </div>
           <Switch isSelected={settings[item.key]} onChange={toggle(item.key)}>
@@ -491,9 +499,9 @@ function NotificationsSection() {
             <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-surface-secondary">
               <Mail className="size-4 text-muted" />
             </div>
-            <Card.Title>Email Notifications</Card.Title>
+            <Card.Title>{t('common.admin.settings.notifications.emailNotifications')}</Card.Title>
           </div>
-          <p className="mt-1 pl-10 text-sm text-muted">Sent to admin@example.com.</p>
+          <p className="mt-1 pl-10 text-sm text-muted">{t('common.admin.settings.notifications.emailDescription')}</p>
         </Card.Header>
         <Card.Content>{renderGroup(EMAIL_ITEMS)}</Card.Content>
       </Card>
@@ -504,9 +512,9 @@ function NotificationsSection() {
             <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-surface-secondary">
               <Bell className="size-4 text-muted" />
             </div>
-            <Card.Title>Push Notifications</Card.Title>
+            <Card.Title>{t('common.admin.settings.notifications.pushNotifications')}</Card.Title>
           </div>
-          <p className="mt-1 pl-10 text-sm text-muted">Browser and mobile push alert preferences.</p>
+          <p className="mt-1 pl-10 text-sm text-muted">{t('common.admin.settings.notifications.pushDescription')}</p>
         </Card.Header>
         <Card.Content>{renderGroup(PUSH_ITEMS)}</Card.Content>
       </Card>
@@ -515,22 +523,24 @@ function NotificationsSection() {
 }
 
 export function SettingMain() {
+  const t = useTypedTranslations()
+
   return (
     <Tabs defaultSelectedKey="profile">
       <Tabs.ListContainer>
-        <Tabs.List aria-label="Settings sections">
+        <Tabs.List aria-label={t('common.admin.settings.tabs.ariaLabel')}>
           <Tabs.Tab id="profile">
-            Profile
+            {t('common.admin.settings.tabs.profile')}
             <Tabs.Indicator />
           </Tabs.Tab>
           <Tabs.Tab id="security">
             <Tabs.Separator />
-            Security
+            {t('common.admin.settings.tabs.security')}
             <Tabs.Indicator />
           </Tabs.Tab>
           <Tabs.Tab id="notifications">
             <Tabs.Separator />
-            Notifications
+            {t('common.admin.settings.tabs.notifications')}
             <Tabs.Indicator />
           </Tabs.Tab>
         </Tabs.List>

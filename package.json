@@ -12,6 +12,9 @@
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:seed": "tsx scripts/seed-database.ts",
     "gen:i18n": "tsx scripts/generate-translation-types.ts",
     "gen:i18n:watch": "tsx scripts/watch-translations.ts",
     "translate": "tsx scripts/auto-translate.ts"
@@ -20,6 +23,7 @@
     "@heroui/react": "3.0.1",
     "@heroui/styles": "3.0.1",
     "@hookform/resolvers": "^5.2.2",
+    "@uiw/react-md-editor": "^4.1.1",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
     "date-fns-tz": "^3.2.0",
@@ -37,7 +41,10 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.68.0",
+    "react-markdown": "^10.1.0",
     "recharts": "^3.5.0",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1",
     "tailwind-merge": "^3.4.0",
     "vectify": "^2.0.2",
     "zod": "^4.1.13"

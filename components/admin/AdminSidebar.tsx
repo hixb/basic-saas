@@ -7,21 +7,26 @@ import {
   ChevronRight,
   ChevronsUpDown,
   CircleSmall,
+  FileText,
+  Inbox,
   LayoutDashboard,
   LogOut,
   Menu,
-  Settings,
+  ShieldAlert,
+  Tags,
   Users,
   X,
 } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
+import { AdminApi } from '~/apis/admin'
 import { Link } from '~/components/navigation/Link'
-import { usePathname } from '~/lib/i18n/navigation'
+import { useTypedTranslations } from '~/hooks/useTypedTranslations'
+import { usePathname, useRouter } from '~/lib/i18n/navigation'
 import { cn } from '~/lib/utils/tools'
 
 interface NavItem {
-  label: string
+  labelKey: string
   href?: string
   icon?: ComponentType<{ className?: string }>
   children?: NavItem[]
@@ -40,15 +45,12 @@ interface SidebarContentProps {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { label: 'Users', icon: Users, href: '/admin/users' },
-  {
-    label: 'Personal Center',
-    icon: Settings,
-    children: [
-      { href: '/admin/settings', label: 'Settings' },
-    ],
-  },
+  { href: '/admin/dashboard', labelKey: 'admin.nav.dashboard', icon: LayoutDashboard },
+  { labelKey: 'admin.nav.users', icon: Users, href: '/admin/users' },
+  { labelKey: 'admin.nav.materials', icon: FileText, href: '/admin/materials' },
+  { labelKey: 'admin.nav.materialCategories', icon: Tags, href: '/admin/material-categories' },
+  { labelKey: 'admin.nav.inquiries', icon: Inbox, href: '/admin/inquiries' },
+  { labelKey: 'admin.nav.sensitiveWords', icon: ShieldAlert, href: '/admin/sensitive-words' },
 ]
 
 function isItemActive(item: NavItem, pathname: string): boolean {
@@ -58,6 +60,7 @@ function isItemActive(item: NavItem, pathname: string): boolean {
 }
 
 function NavItemRenderer({ item, pathname, depth = 0, onClose }: NavItemProps) {
+  const t = useTypedTranslations()
   const active = isItemActive(item, pathname)
   const [open, setOpen] = useState(active)
 
@@ -75,7 +78,7 @@ function NavItemRenderer({ item, pathname, depth = 0, onClose }: NavItemProps) {
         >
           {depth > 0 && <span className="shrink-0" style={{ width: `${depth * 12}px` }} />}
           {item.icon ? <item.icon className="size-4 shrink-0" /> : <CircleSmall className="size-4 shrink-0" />}
-          <span className="flex-1 text-left">{item.label}</span>
+          <span className="flex-1 text-left">{t(`common.${item.labelKey}` as any)}</span>
           <motion.span
             animate={{ rotate: open ? 90 : 0 }}
             className="flex shrink-0 items-center"
@@ -97,7 +100,7 @@ function NavItemRenderer({ item, pathname, depth = 0, onClose }: NavItemProps) {
                 <NavItemRenderer
                   depth={depth + 1}
                   item={child}
-                  key={child.href ?? child.label}
+                  key={child.href ?? child.labelKey}
                   onClose={onClose}
                   pathname={pathname}
                 />
@@ -122,18 +125,26 @@ function NavItemRenderer({ item, pathname, depth = 0, onClose }: NavItemProps) {
     >
       {depth > 0 && <span className="shrink-0" style={{ width: `${depth * 12}px` }} />}
       {item.icon ? <item.icon className="size-4 shrink-0" /> : <CircleSmall className="size-4 shrink-0" />}
-      {item.label}
+      {t(`common.${item.labelKey}` as any)}
     </Link>
   )
 }
 
 function SidebarContent({ pathname, onClose }: SidebarContentProps) {
+  const t = useTypedTranslations()
+  const router = useRouter()
+
+  const logout = async () => {
+    await AdminApi.auth.logout()
+    router.push('/admin/login')
+  }
+
   return (
     <div className="flex h-full flex-col">
       <div className="flex items-center justify-between px-5 py-4">
         <div className="flex items-center gap-2.5">
           <Image alt="Logo" height={28} loading="eager" src="/logo.svg" width={28} />
-          <span className="text-sm font-bold uppercase tracking-widest text-foreground">Admin</span>
+          <span className="text-sm font-bold uppercase tracking-widest text-foreground">{t('common.admin.nav.brand')}</span>
         </div>
         {onClose && (
           <Button isIconOnly onPress={onClose} size="sm" variant="ghost">
@@ -146,7 +157,7 @@ function SidebarContent({ pathname, onClose }: SidebarContentProps) {
         {NAV_ITEMS.map(item => (
           <NavItemRenderer
             item={item}
-            key={item.href ?? item.label}
+            key={item.href ?? item.labelKey}
             onClose={onClose}
             pathname={pathname}
           />
@@ -165,7 +176,7 @@ function SidebarContent({ pathname, onClose }: SidebarContentProps) {
                 <Avatar.Fallback>A</Avatar.Fallback>
               </Avatar>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-foreground">Admin User</p>
+                <p className="truncate text-sm font-medium text-foreground">{t('common.admin.nav.adminUser')}</p>
                 <p className="truncate text-xs text-muted">admin@example.com</p>
               </div>
               <Button isIconOnly size="sm" variant="ghost">
@@ -175,15 +186,15 @@ function SidebarContent({ pathname, onClose }: SidebarContentProps) {
           </Popover.Trigger>
           <Popover.Content>
             <Popover.Dialog className="p-2">
-              <div className="menu-item menu-item--danger">
+              <button className="menu-item menu-item--danger w-full" onClick={logout} type="button">
                 <LogOut className="size-4 shrink-0 text-danger" />
-                <Label>Delete file</Label>
+                <Label>{t('common.admin.nav.signOut')}</Label>
                 <Kbd className="ms-auto" slot="keyboard" variant="light">
                   <Kbd.Abbr keyValue="command" />
                   <Kbd.Abbr keyValue="shift" />
-                  <Kbd.Content>D</Kbd.Content>
+                  <Kbd.Content>Q</Kbd.Content>
                 </Kbd>
-              </div>
+              </button>
             </Popover.Dialog>
           </Popover.Content>
         </Popover>

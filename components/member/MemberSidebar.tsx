@@ -5,9 +5,12 @@ import { Menu } from 'lucide-react'
 import Image from 'next/image'
 import { Setting } from '~/components/icons'
 import { Link } from '~/components/navigation/Link'
+import { useTypedTranslations } from '~/hooks/useTypedTranslations'
 import { cn } from '~/lib/utils/tools'
 
 export function MemberSidebar() {
+  const t = useTypedTranslations()
+
   return (
     <>
       <aside className="hidden h-full w-[320px] overflow-x-hidden overflow-y-scroll sm:flex sm:p-4">
@@ -38,7 +41,7 @@ export function MemberSidebar() {
               href="/member/settings"
             >
               <Setting className="m-0 size-6" size={28} />
-              Settings
+              {t('common.member.pages.settings.title')}
             </Link>
           </div>
         </div>

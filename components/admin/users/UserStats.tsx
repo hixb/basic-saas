@@ -2,56 +2,90 @@
 
 import type { ComponentType } from 'react'
 import { Card, Chip } from '@heroui/react'
-import { CreditCard, TrendingDown, TrendingUp, UserCheck, UserPlus, Users } from 'lucide-react'
+import { UserCheck, UserPlus, Users, UserX } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { AdminApi } from '~/apis/admin'
+import { useTypedTranslations } from '~/hooks/useTypedTranslations'
+import { ResponseCode } from '~/shared/types/api.type'
+
+interface UserRow {
+  id: number
+  status: number
+  createdAt: string
+}
 
 interface StatItem {
   label: string
-  value: string
-  change: string
+  value: number
   subtext: string
-  up: boolean
   icon: ComponentType<{ className?: string }>
 }
 
-const STATS: StatItem[] = [
-  {
-    label: 'Total Users',
-    value: '10',
-    change: '+3',
-    subtext: 'all time',
-    up: true,
-    icon: Users,
-  },
-  {
-    label: 'Active Users',
-    value: '7',
-    change: '+2',
-    subtext: '70% of total',
-    up: true,
-    icon: UserCheck,
-  },
-  {
-    label: 'Paid Users',
-    value: '4,567',
-    change: '+18%',
-    subtext: 'vs last month',
-    up: true,
-    icon: CreditCard,
-  },
-  {
-    label: 'New This Month',
-    value: '23',
-    change: '+5%',
-    subtext: 'registered',
-    up: true,
-    icon: UserPlus,
-  },
-]
+function isSameMonth(value: string) {
+  const date = new Date(value)
+  const now = new Date()
+
+  return date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth()
+}
 
 export function UserStats() {
+  const t = useTypedTranslations()
+  const [users, setUsers] = useState<UserRow[]>([])
+  const [total, setTotal] = useState(0)
+
+  useEffect(() => {
+    let mounted = true
+
+    AdminApi.users.list({ page: 1, pageSize: 500 }).then((result) => {
+      if (!mounted || result.code !== ResponseCode.SUCCESS)
+        return
+
+      setUsers((result.data ?? []) as UserRow[])
+      setTotal(result.pagination?.total ?? result.data?.length ?? 0)
+    })
+
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  const stats = useMemo<StatItem[]>(() => {
+    const activeCount = users.filter(user => user.status === 1).length
+    const disabledCount = users.filter(user => user.status !== 1).length
+    const newThisMonth = users.filter(user => isSameMonth(user.createdAt)).length
+    const activePercent = total > 0 ? Math.round((activeCount / total) * 100) : 0
+
+    return [
+      {
+        label: t('common.admin.users.stats.total'),
+        value: total,
+        subtext: t('common.admin.users.stats.totalSubtext'),
+        icon: Users,
+      },
+      {
+        label: t('common.admin.users.stats.active'),
+        value: activeCount,
+        subtext: t('common.admin.users.stats.activeSubtext', { percent: activePercent }),
+        icon: UserCheck,
+      },
+      {
+        label: t('common.admin.users.stats.disabled'),
+        value: disabledCount,
+        subtext: t('common.admin.users.stats.disabledSubtext'),
+        icon: UserX,
+      },
+      {
+        label: t('common.admin.users.stats.newThisMonth'),
+        value: newThisMonth,
+        subtext: t('common.admin.users.stats.newThisMonthSubtext'),
+        icon: UserPlus,
+      },
+    ]
+  }, [t, total, users])
+
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      {STATS.map(({ label, value, change, subtext, up, icon: Icon }) => (
+      {stats.map(({ label, value, subtext, icon: Icon }) => (
         <Card key={label}>
           <Card.Header>
             <div className="flex items-center justify-between">
@@ -64,11 +98,8 @@ export function UserStats() {
           <Card.Content>
             <p className="text-2xl font-bold text-foreground">{value}</p>
             <div className="mt-2 flex items-center gap-2">
-              <Chip color={up ? 'success' : 'danger'} size="sm" variant="soft">
-                {up
-                  ? <TrendingUp className="mr-0.5 size-3" />
-                  : <TrendingDown className="mr-0.5 size-3" />}
-                {change}
+              <Chip color="success" size="sm" variant="soft">
+                {value}
               </Chip>
               <span className="text-xs text-muted">{subtext}</span>
             </div>

@@ -82,10 +82,10 @@ async function generateTranslationTypes(): Promise<void> {
       const entries = Object.entries(keys)
         .map(([key, placeholders]) => {
           if (placeholders.length === 0) {
-            return `    ${key}: void`
+            return `    '${key}': void`
           }
           const params = placeholders.map(p => `${p}: string | number | boolean | Date | null | undefined`).join(', ')
-          return `    ${key}: { ${params} }`
+          return `    '${key}': { ${params} }`
         })
         .join('\n')
 

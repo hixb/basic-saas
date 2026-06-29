@@ -29,5 +29,5 @@ export interface LoginResponse {
     roleId: number
     status: number
   }
-  token: string
+  token?: string
 }

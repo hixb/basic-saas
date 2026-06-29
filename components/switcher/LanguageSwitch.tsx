@@ -5,11 +5,13 @@ import { ChevronDown } from 'lucide-react'
 import { useLocale } from 'next-intl'
 import { useCallback } from 'react'
 import { WEBSITE_CONFIG } from '~/config/website'
+import { useTypedTranslations } from '~/hooks/useTypedTranslations'
 import { usePathname, useRouter } from '~/lib/i18n/navigation'
 
 const locales = WEBSITE_CONFIG.i18n.locales
 
 export function LanguageSwitch() {
+  const t = useTypedTranslations()
   const router = useRouter()
   const pathname = usePathname()
   const currentLocale = useLocale()
@@ -37,9 +39,9 @@ export function LanguageSwitch() {
       <Popover.Content>
         <Popover.Dialog className="w-48">
           <Popover.Arrow />
-          <Popover.Heading>Select Language</Popover.Heading>
+          <Popover.Heading>{t('common.switcher.language.title')}</Popover.Heading>
           <ListBox
-            aria-label="Language selection"
+            aria-label={t('common.switcher.language.ariaLabel')}
             className="mt-2 p-0"
             onSelectionChange={(keys) => {
               const selected = Array.from(keys)[0]
