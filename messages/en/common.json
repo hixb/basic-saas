@@ -173,6 +173,7 @@
     "nav": {
       "brand": "Admin",
       "dashboard": "Dashboard",
+      "analytics": "Analytics",
       "users": "Users",
       "materials": "Materials",
       "materialCategories": "Material Categories",
@@ -192,6 +193,10 @@
       "users": {
         "title": "User Management",
         "description": "Monitor and manage all registered platform users."
+      },
+      "analytics": {
+        "title": "Analytics",
+        "description": "Review visitor sessions, IP geography, behavior events, and long-term R2 session replays."
       },
       "materials": {
         "title": "Content Materials",
@@ -232,6 +237,92 @@
       "cancel": "Cancel",
       "create": "Create",
       "save": "Save"
+    },
+    "analytics": {
+      "metrics": {
+        "sessions": "Sessions",
+        "events": "Events",
+        "replaySessions": "Replay sessions",
+        "countries": "Countries"
+      },
+      "charts": {
+        "sessionTrend": "Session trend",
+        "topCountries": "Top countries"
+      },
+      "sessions": {
+        "title": "Recent sessions",
+        "description": "Search by session, visitor, IP, page, city, or country.",
+        "ariaLabel": "Analytics sessions",
+        "empty": "No sessions found",
+        "pageSummary": "{start} to {end} of {total} sessions"
+      },
+      "search": {
+        "ariaLabel": "Search analytics sessions",
+        "placeholder": "Search sessions..."
+      },
+      "columns": {
+        "visitor": "Visitor",
+        "location": "Location",
+        "entry": "Entry",
+        "device": "Device",
+        "events": "Events",
+        "replay": "Replay",
+        "created": "Created"
+      },
+      "filters": {
+        "replay": "Replay",
+        "country": "Country",
+        "allSessions": "All sessions",
+        "hasReplay": "Has replay",
+        "noReplay": "No replay",
+        "allCountries": "All countries"
+      },
+      "actions": {
+        "delete": "Delete",
+        "viewTrace": "View trace",
+        "play": "Play replay"
+      },
+      "delete": {
+        "title": "Delete session",
+        "description": "This will delete the analytics session, timeline events, and persisted replay chunks."
+      },
+      "values": {
+        "none": "None",
+        "unknown": "Unknown",
+        "chunks": "{count} chunks"
+      },
+      "devices": {
+        "desktop": "Desktop",
+        "tablet": "Tablet",
+        "mobile": "Mobile"
+      },
+      "replay": {
+        "title": "Session replay",
+        "loading": "Loading replay...",
+        "empty": "No replay events available.",
+        "missingSnapshot": "This replay is missing its initial page snapshot. New sessions will include it automatically.",
+        "summary": "{events} events · {chunks} chunks",
+        "progress": "Replay progress",
+        "restart": "Restart",
+        "back": "Back 5 seconds",
+        "forward": "Forward 5 seconds",
+        "play": "Play",
+        "pause": "Pause",
+        "fullscreen": "Fullscreen",
+        "exitFullscreen": "Exit fullscreen"
+      },
+      "trace": {
+        "title": "User trace",
+        "loading": "Loading trace...",
+        "ip": "IP",
+        "location": "Location",
+        "device": "Device",
+        "duration": "Duration",
+        "replaySize": "Replay size",
+        "entry": "Entry",
+        "exit": "Exit",
+        "created": "Created"
+      }
     },
     "status": {
       "draft": "Draft",

@@ -45,6 +45,8 @@
     "recharts": "^3.5.0",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
+    "rrweb": "^2.1.0",
+    "rrweb-player": "^2.1.0",
     "tailwind-merge": "^3.4.0",
     "vectify": "^2.0.2",
     "zod": "^4.1.13"

@@ -125,6 +125,7 @@ export interface TranslationParamsMap {
     'details.sidebar.points.compliance': void
     'admin.nav.brand': void
     'admin.nav.dashboard': void
+    'admin.nav.analytics': void
     'admin.nav.users': void
     'admin.nav.materials': void
     'admin.nav.materialCategories': void
@@ -139,6 +140,8 @@ export interface TranslationParamsMap {
     'admin.pages.dashboard.description': void
     'admin.pages.users.title': void
     'admin.pages.users.description': void
+    'admin.pages.analytics.title': void
+    'admin.pages.analytics.description': void
     'admin.pages.materials.title': void
     'admin.pages.materials.description': void
     'admin.pages.materialCategories.title': void
@@ -166,6 +169,66 @@ export interface TranslationParamsMap {
     'admin.crud.cancel': void
     'admin.crud.create': void
     'admin.crud.save': void
+    'admin.analytics.metrics.sessions': void
+    'admin.analytics.metrics.events': void
+    'admin.analytics.metrics.replaySessions': void
+    'admin.analytics.metrics.countries': void
+    'admin.analytics.charts.sessionTrend': void
+    'admin.analytics.charts.topCountries': void
+    'admin.analytics.sessions.title': void
+    'admin.analytics.sessions.description': void
+    'admin.analytics.sessions.ariaLabel': void
+    'admin.analytics.sessions.empty': void
+    'admin.analytics.sessions.pageSummary': { start: string | number | boolean | Date | null | undefined, end: string | number | boolean | Date | null | undefined, total: string | number | boolean | Date | null | undefined }
+    'admin.analytics.search.ariaLabel': void
+    'admin.analytics.search.placeholder': void
+    'admin.analytics.columns.visitor': void
+    'admin.analytics.columns.location': void
+    'admin.analytics.columns.entry': void
+    'admin.analytics.columns.device': void
+    'admin.analytics.columns.events': void
+    'admin.analytics.columns.replay': void
+    'admin.analytics.columns.created': void
+    'admin.analytics.filters.replay': void
+    'admin.analytics.filters.country': void
+    'admin.analytics.filters.allSessions': void
+    'admin.analytics.filters.hasReplay': void
+    'admin.analytics.filters.noReplay': void
+    'admin.analytics.filters.allCountries': void
+    'admin.analytics.actions.delete': void
+    'admin.analytics.actions.viewTrace': void
+    'admin.analytics.actions.play': void
+    'admin.analytics.delete.title': void
+    'admin.analytics.delete.description': void
+    'admin.analytics.values.none': void
+    'admin.analytics.values.unknown': void
+    'admin.analytics.values.chunks': { count: string | number | boolean | Date | null | undefined }
+    'admin.analytics.devices.desktop': void
+    'admin.analytics.devices.tablet': void
+    'admin.analytics.devices.mobile': void
+    'admin.analytics.replay.title': void
+    'admin.analytics.replay.loading': void
+    'admin.analytics.replay.empty': void
+    'admin.analytics.replay.missingSnapshot': void
+    'admin.analytics.replay.summary': { events: string | number | boolean | Date | null | undefined, chunks: string | number | boolean | Date | null | undefined }
+    'admin.analytics.replay.progress': void
+    'admin.analytics.replay.restart': void
+    'admin.analytics.replay.back': void
+    'admin.analytics.replay.forward': void
+    'admin.analytics.replay.play': void
+    'admin.analytics.replay.pause': void
+    'admin.analytics.replay.fullscreen': void
+    'admin.analytics.replay.exitFullscreen': void
+    'admin.analytics.trace.title': void
+    'admin.analytics.trace.loading': void
+    'admin.analytics.trace.ip': void
+    'admin.analytics.trace.location': void
+    'admin.analytics.trace.device': void
+    'admin.analytics.trace.duration': void
+    'admin.analytics.trace.replaySize': void
+    'admin.analytics.trace.entry': void
+    'admin.analytics.trace.exit': void
+    'admin.analytics.trace.created': void
     'admin.status.draft': void
     'admin.status.published': void
     'admin.status.archived': void

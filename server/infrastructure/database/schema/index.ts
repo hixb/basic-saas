@@ -1,3 +1,7 @@
+export * from './analytics-event.schema'
+export * from './analytics-replay-chunk.schema'
+export * from './analytics-session.schema'
+export * from './analytics-setting.schema'
 export * from './customer-inquiry.schema'
 export * from './login-log.schema'
 export * from './material-category.schema'

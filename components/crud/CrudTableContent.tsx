@@ -289,7 +289,7 @@ export function CrudTableContent<T>({
   const allColumns = useMemo<ColumnDef<T>[]>(() => [
     ...typedColumns,
     ...(hasActions
-      ? [{ key: '__actions__', label: labels?.actions ?? 'Actions', className: 'text-end' } satisfies ColumnDef<T>]
+      ? [{ key: '__actions__', label: labels?.actions ?? 'Actions', className: 'text-end', width: 128 } satisfies ColumnDef<T>]
       : []),
   ], [typedColumns, hasActions, labels?.actions])
 
@@ -322,7 +322,7 @@ export function CrudTableContent<T>({
   const renderCell = useCallback((col: ColumnDef<T>, row: T, rowId: string | number) => {
     if (col.key === '__actions__') {
       return (
-        <div className="flex items-center justify-end gap-1">
+        <div className="flex w-full items-center justify-end gap-1">
           {renderActions?.({ row, rowId })}
           {operations.update && hasFormModal && (
             <Button isIconOnly onPress={() => openEdit(row)} size="sm" variant="tertiary">
@@ -480,7 +480,7 @@ export function CrudTableContent<T>({
                           className={cn(
                             col.className,
                             'whitespace-nowrap min-w-max truncate',
-                            col.key === '__actions__' && 'sticky right-0 z-10 bg-inherit',
+                            col.key === '__actions__' && 'sticky right-0 z-10',
                           )}
                           key={col.key}
                         >

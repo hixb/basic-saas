@@ -44,7 +44,7 @@ export function HomePageClient({ materials }: HomePageClientProps) {
   return (
     <main className="min-h-dvh bg-[#b8462f] text-[#1d1b17] dark:bg-[#062f38] dark:text-[#f4efe7]">
       <header className="sticky top-0 z-50 border-b border-black/8 bg-[#fbfaf6]/90 backdrop-blur-xl dark:border-white/10 dark:bg-[#062f38]/88">
-        <div className="mx-auto flex h-14 max-w-[1380px] items-center justify-between px-5 lg:px-8">
+        <div className="mx-auto flex h-14 max-w-345 items-center justify-between px-5 lg:px-8">
           <Link className="flex items-center gap-2 text-sm font-semibold" href="/">
             <Boxes className="size-4" />
             {t('common.home.brand')}
@@ -65,10 +65,10 @@ export function HomePageClient({ materials }: HomePageClientProps) {
         </div>
       </header>
 
-      <section className="mx-auto max-w-[1380px] rounded-b-xl bg-[#fbfaf6] px-5 pb-14 pt-16 dark:bg-[#f4efe7] dark:text-[#1d1b17] lg:px-8 lg:pt-24">
+      <section className="mx-auto max-w-345 rounded-b-xl bg-[#fbfaf6] px-5 pb-14 pt-16 dark:bg-[#f4efe7] dark:text-[#1d1b17] lg:px-8 lg:pt-24">
         <div className="grid gap-8 lg:grid-cols-[1.16fr_0.84fr] lg:items-end">
           <motion.div animate={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 18 }} transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}>
-            <h1 className="max-w-[860px] font-serif text-[clamp(4rem,8.6vw,6.6rem)] leading-[0.88] tracking-normal text-[#28231d]">
+            <h1 className="max-w-215 font-serif text-[clamp(4rem,8.6vw,6.6rem)] leading-[0.88] tracking-normal text-[#28231d]">
               {t('common.home.hero.title')}
             </h1>
             <p className="mt-7 max-w-2xl border-l border-[#b8462f]/45 pl-4 text-[17px] leading-8 text-[#4e4840]">
@@ -86,7 +86,7 @@ export function HomePageClient({ materials }: HomePageClientProps) {
 
           <motion.div
             animate={{ opacity: 1, y: 0, clipPath: 'inset(0% 0% 0% 0% round 12px)' }}
-            className="relative min-h-[360px] overflow-hidden rounded-xl bg-[#15100d] lg:min-h-[430px]"
+            className="relative min-h-90 overflow-hidden rounded-xl bg-[#15100d] lg:min-h-107.5"
             initial={{ opacity: 0, y: 18, clipPath: 'inset(7% 5% 7% 5% round 18px)' }}
             transition={{ delay: 0.12, duration: 0.86, ease: [0.22, 1, 0.36, 1] }}
           >
@@ -144,7 +144,7 @@ export function HomePageClient({ materials }: HomePageClientProps) {
       </section>
 
       <section className="rounded-t-xl bg-[#fbfaf6] px-5 py-16 dark:bg-[#f4efe7] dark:text-[#1d1b17] lg:px-8" id="specialties">
-        <div className="mx-auto max-w-[1380px]">
+        <div className="mx-auto max-w-345">
           <motion.h2 className="text-center font-serif text-4xl text-[#28231d] md:text-5xl" {...reveal}>
             {t('common.home.specialties.title')}
           </motion.h2>
@@ -163,7 +163,7 @@ export function HomePageClient({ materials }: HomePageClientProps) {
       </section>
 
       <section className="bg-[#073f4a] px-5 py-24 text-white dark:bg-[#082f37] lg:px-8" id="platform">
-        <div className="mx-auto grid max-w-[1080px] gap-16 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="mx-auto grid max-w-270 gap-16 lg:grid-cols-[0.9fr_1.1fr]">
           <motion.div {...reveal}>
             <h2 className="max-w-xl font-serif text-5xl leading-[0.96]">
               {t('common.home.platform.title')}
@@ -192,7 +192,7 @@ export function HomePageClient({ materials }: HomePageClientProps) {
       </section>
 
       <section className="-mt-10 rounded-xl bg-[#fbfaf6] px-5 py-16 dark:bg-[#f4efe7] dark:text-[#1d1b17] lg:px-8" id="resources">
-        <div className="mx-auto max-w-[1080px]">
+        <div className="mx-auto max-w-270">
           <motion.div className="flex flex-wrap items-end justify-between gap-4" {...reveal}>
             <div>
               <p className="text-[11px] uppercase tracking-[0.18em] text-[#b8462f]">{t('common.home.materials.eyebrow')}</p>
@@ -211,7 +211,7 @@ export function HomePageClient({ materials }: HomePageClientProps) {
                     style={{ backgroundImage: `url(${material.coverUrl || specialtyImages[index % specialtyImages.length]})` }}
                   />
                   <div className="flex flex-1 flex-col p-5">
-                    <Chip size="sm" variant="soft">{material.categoryName ?? material.category}</Chip>
+                    <Chip className="max-w-max" size="sm" variant="soft">{material.categoryName ?? material.category}</Chip>
                     <h3 className="mt-4 font-serif text-2xl leading-tight">{material.title}</h3>
                     <p className="mt-3 line-clamp-2 text-sm leading-6 text-[#5f574f]">{material.summary}</p>
                   </div>
@@ -228,7 +228,7 @@ export function HomePageClient({ materials }: HomePageClientProps) {
       </section>
 
       <section className="bg-[#fbfaf6] px-5 py-20 dark:bg-[#f4efe7] dark:text-[#1d1b17] lg:px-8" id="faq">
-        <div className="mx-auto grid max-w-[1080px] gap-10 lg:grid-cols-[0.75fr_1.25fr]">
+        <div className="mx-auto grid max-w-270 gap-10 lg:grid-cols-[0.75fr_1.25fr]">
           <motion.div {...reveal}>
             <p className="text-[11px] uppercase tracking-[0.18em] text-[#b8462f]">{t('common.home.faq.eyebrow')}</p>
             <h2 className="mt-3 font-serif text-4xl leading-tight text-[#28231d]">{t('common.home.faq.title')}</h2>
@@ -247,7 +247,7 @@ export function HomePageClient({ materials }: HomePageClientProps) {
       </section>
 
       <footer className="bg-[#b8462f] px-5 py-16 text-white lg:px-8">
-        <div className="mx-auto grid max-w-[1080px] gap-10 md:grid-cols-[1.2fr_1fr_1fr]">
+        <div className="mx-auto grid max-w-270 gap-10 md:grid-cols-[1.2fr_1fr_1fr]">
           <div>
             <div className="flex items-center gap-2 text-sm font-semibold">
               <Boxes className="size-4" />

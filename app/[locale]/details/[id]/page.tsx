@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import type { ComponentType } from 'react'
-import { Chip } from '@heroui/react'
 import { ArrowLeft, Boxes, CheckCircle2, Download, Globe2, PackageCheck, ShieldCheck } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import NextLink from 'next/link'
@@ -130,7 +129,9 @@ export default async function MaterialDetailsPage({ params }: MaterialDetailsPag
           </aside>
           <article>
             <p className="text-[11px] uppercase tracking-[0.18em] text-white/58">{t('details.eyebrow')}</p>
-            <Chip className="mt-5" size="sm" variant="soft">{material.categoryName}</Chip>
+            <span className="mt-5 inline-flex h-7 items-center rounded-full bg-white/16 px-3 text-xs font-medium text-white">
+              {material.categoryName}
+            </span>
             <h1 className="mt-6 max-w-4xl font-serif text-5xl leading-[0.98] md:text-7xl">
               {material.title}
             </h1>

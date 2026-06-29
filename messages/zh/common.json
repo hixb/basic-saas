@@ -173,6 +173,7 @@
     "nav": {
       "brand": "后台",
       "dashboard": "仪表盘",
+      "analytics": "埋点分析",
       "users": "用户",
       "materials": "资料",
       "materialCategories": "资料分类",
@@ -192,6 +193,10 @@
       "users": {
         "title": "用户管理",
         "description": "查看并管理平台注册用户。"
+      },
+      "analytics": {
+        "title": "埋点分析",
+        "description": "查看访客会话、IP 地理位置、行为事件和长期保存在 R2 的会话回放。"
       },
       "materials": {
         "title": "内容资料",
@@ -232,6 +237,92 @@
       "cancel": "取消",
       "create": "创建",
       "save": "保存"
+    },
+    "analytics": {
+      "metrics": {
+        "sessions": "会话数",
+        "events": "事件数",
+        "replaySessions": "可回放会话",
+        "countries": "国家/地区"
+      },
+      "charts": {
+        "sessionTrend": "会话趋势",
+        "topCountries": "热门国家/地区"
+      },
+      "sessions": {
+        "title": "最近会话",
+        "description": "可按会话、访客、IP、页面、城市或国家搜索。",
+        "ariaLabel": "埋点会话列表",
+        "empty": "暂无会话",
+        "pageSummary": "共 {total} 个会话，当前 {start} 至 {end}"
+      },
+      "search": {
+        "ariaLabel": "搜索埋点会话",
+        "placeholder": "搜索会话..."
+      },
+      "columns": {
+        "visitor": "访客",
+        "location": "位置",
+        "entry": "入口",
+        "device": "设备",
+        "events": "事件",
+        "replay": "回放",
+        "created": "创建时间"
+      },
+      "filters": {
+        "replay": "回放",
+        "country": "国家/地区",
+        "allSessions": "全部会话",
+        "hasReplay": "有回放",
+        "noReplay": "无回放",
+        "allCountries": "全部国家/地区"
+      },
+      "actions": {
+        "delete": "删除",
+        "viewTrace": "查看轨迹",
+        "play": "播放回放"
+      },
+      "delete": {
+        "title": "删除会话",
+        "description": "这会删除该埋点会话、行为时间线事件以及已保存的回放分片。"
+      },
+      "values": {
+        "none": "无",
+        "unknown": "未知",
+        "chunks": "{count} 个分片"
+      },
+      "devices": {
+        "desktop": "电脑",
+        "tablet": "平板",
+        "mobile": "手机"
+      },
+      "replay": {
+        "title": "会话回放",
+        "loading": "正在加载回放...",
+        "empty": "暂无回放事件。",
+        "missingSnapshot": "该回放缺少初始页面快照。新的会话会自动包含快照。",
+        "summary": "{events} 个事件 · {chunks} 个分片",
+        "progress": "回放进度",
+        "restart": "重新开始",
+        "back": "后退 5 秒",
+        "forward": "前进 5 秒",
+        "play": "播放",
+        "pause": "暂停",
+        "fullscreen": "全屏",
+        "exitFullscreen": "退出全屏"
+      },
+      "trace": {
+        "title": "用户轨迹",
+        "loading": "正在加载轨迹...",
+        "ip": "IP",
+        "location": "位置",
+        "device": "设备",
+        "duration": "停留时长",
+        "replaySize": "回放大小",
+        "entry": "入口",
+        "exit": "退出",
+        "created": "创建时间"
+      }
     },
     "status": {
       "draft": "草稿",

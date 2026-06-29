@@ -4,6 +4,7 @@ import type { ComponentType } from 'react'
 import { Avatar, Button, Kbd, Label, Popover } from '@heroui/react'
 import { motion } from 'framer-motion'
 import {
+  ChartNoAxesCombined,
   ChevronRight,
   ChevronsUpDown,
   CircleSmall,
@@ -46,6 +47,7 @@ interface SidebarContentProps {
 
 const NAV_ITEMS: NavItem[] = [
   { href: '/admin/dashboard', labelKey: 'admin.nav.dashboard', icon: LayoutDashboard },
+  { href: '/admin/analytics', labelKey: 'admin.nav.analytics', icon: ChartNoAxesCombined },
   { labelKey: 'admin.nav.users', icon: Users, href: '/admin/users' },
   { labelKey: 'admin.nav.materials', icon: FileText, href: '/admin/materials' },
   { labelKey: 'admin.nav.materialCategories', icon: Tags, href: '/admin/material-categories' },

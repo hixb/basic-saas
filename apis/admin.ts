@@ -13,6 +13,41 @@ export interface MaterialUploadResponse {
   url: string
 }
 
+export interface AnalyticsOverviewResponse {
+  metrics: {
+    sessions: number
+    events: number
+    replaySessions: number
+    countries: number
+  }
+  sessionTrend: Array<{ date: string, sessions: number, events: number }>
+  topCountries: Array<{ country: string, value: number }>
+  topPages: Array<{ path: string, value: number }>
+}
+
+export interface AnalyticsReplayUrl {
+  chunkIndex: number
+  contentType: string
+  eventCount: number
+  size: number
+  key: string
+  url: string
+  expiresAt: string
+}
+
+export interface AnalyticsReplayDiagnostics {
+  chunks: number
+  eventCount: number
+  typeCounts: Record<string, number>
+  hasMeta: boolean
+  hasFullSnapshot: boolean
+  firstTimestamp: number | null
+  lastTimestamp: number | null
+  firstTypes: unknown[]
+  meta: unknown
+  fullSnapshotNodeType: unknown
+}
+
 export const AdminApi = {
   auth: {
     /**
@@ -62,6 +97,14 @@ export const AdminApi = {
     create: (data: SensitiveWordInput) => client.post('/api/admin/sensitive-words', data),
     update: (id: number, data: Partial<SensitiveWordInput>) => client.put(`/api/admin/sensitive-words/${id}`, data),
     delete: (id: number) => client.del(`/api/admin/sensitive-words/${id}`),
+  },
+  analytics: {
+    overview: () => client.get<AnalyticsOverviewResponse>('/api/admin/analytics/overview'),
+    sessions: (query: Record<string, unknown>) => client.get<any[]>('/api/admin/analytics/sessions', query) as Promise<PaginatedResponse<any>>,
+    detail: (sessionId: string) => client.get<any>(`/api/admin/analytics/sessions/${sessionId}`),
+    replayUrls: (sessionId: string) => client.get<{ sessionId: string, urls: AnalyticsReplayUrl[] }>(`/api/admin/analytics/sessions/${sessionId}/replay-urls`),
+    replayEvents: (sessionId: string) => client.get<{ sessionId: string, events: any[], chunks: number, diagnostics: AnalyticsReplayDiagnostics }>(`/api/admin/analytics/sessions/${sessionId}/replay-events`),
+    deleteSession: (sessionId: string) => client.del(`/api/admin/analytics/sessions/${sessionId}`),
   },
   public: {
     createInquiry: (data: CreateInquiryInput) => client.post('/api/public/inquiries', data),
