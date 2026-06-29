@@ -1,3 +1,4 @@
+import { formatInTimeZone, fromZonedTime } from 'date-fns-tz'
 import { and, count, desc, eq, gte, isNotNull, sql } from 'drizzle-orm'
 import { db } from '~/server/infrastructure/database'
 import { customerInquiries, CustomerInquiryStatus } from '~/server/infrastructure/database/schema/customer-inquiry.schema'
@@ -54,9 +55,10 @@ export interface DashboardSummary {
 }
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000
+const ADMIN_TIME_ZONE = 'Asia/Shanghai'
 
 function getIsoDate(date: Date) {
-  return date.toISOString().slice(0, 10)
+  return formatInTimeZone(date, ADMIN_TIME_ZONE, 'yyyy-MM-dd')
 }
 
 function normalizeCount(value: unknown) {
@@ -68,7 +70,10 @@ function normalizeCount(value: unknown) {
  */
 export async function getDashboardSummary(): Promise<DashboardSummary> {
   const today = new Date()
-  const startDate = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - 6))
+  const todayDate = getIsoDate(today)
+  const startDateKey = getIsoDate(new Date(fromZonedTime(`${todayDate}T00:00:00`, ADMIN_TIME_ZONE).getTime() - 6 * DAY_IN_MS))
+  const startDate = fromZonedTime(`${startDateKey}T00:00:00`, ADMIN_TIME_ZONE)
+  const inquiryTrendDate = sql<string>`to_char(${customerInquiries.createdAt} at time zone 'Asia/Shanghai', 'YYYY-MM-DD')`
 
   const [
     totalInquiries,
@@ -95,14 +100,14 @@ export async function getDashboardSummary(): Promise<DashboardSummary> {
     db.select({ value: count() }).from(users).where(eq(users.status, 1)),
     db
       .select({
-        date: sql<string>`to_char(${customerInquiries.createdAt}, 'YYYY-MM-DD')`,
+        date: inquiryTrendDate,
         inquiries: count(),
         sensitiveHits: sql<number>`count(*) filter (where ${customerInquiries.sensitiveHit} = true)`,
       })
       .from(customerInquiries)
       .where(gte(customerInquiries.createdAt, startDate))
-      .groupBy(sql`to_char(${customerInquiries.createdAt}, 'YYYY-MM-DD')`)
-      .orderBy(sql`to_char(${customerInquiries.createdAt}, 'YYYY-MM-DD')`),
+      .groupBy(inquiryTrendDate)
+      .orderBy(inquiryTrendDate),
     db
       .select({
         key: uploadedMaterials.status,

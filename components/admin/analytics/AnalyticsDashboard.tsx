@@ -77,6 +77,19 @@ function formatDateTime(value: Date | string | null) {
       }).format(date)
 }
 
+function formatShortDate(value: unknown) {
+  if (typeof value !== 'string')
+    return ''
+
+  const [year, month, day] = value.split('-').map(Number)
+  const date = year && month && day ? new Date(year, month - 1, day) : new Date(value)
+
+  if (Number.isNaN(date.getTime()))
+    return value
+
+  return new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric' }).format(date)
+}
+
 function formatDuration(ms: number) {
   if (!ms)
     return '-'
@@ -329,11 +342,28 @@ export function AnalyticsDashboard({ overview }: { overview: AnalyticsOverviewRe
                   </linearGradient>
                 </defs>
                 <CartesianGrid stroke="var(--foreground)" strokeDasharray="3 3" strokeOpacity={0.06} vertical={false} />
-                <XAxis axisLine={false} dataKey="date" tick={{ fill: 'var(--muted)', fontSize: 12 }} tickLine={false} />
+                <XAxis axisLine={false} dataKey="date" tick={{ fill: 'var(--muted)', fontSize: 12 }} tickFormatter={formatShortDate} tickLine={false} />
                 <YAxis axisLine={false} tick={{ fill: 'var(--muted)', fontSize: 12 }} tickLine={false} />
-                <Tooltip />
-                <Area dataKey="sessions" fill="url(#analyticsSessionsGradient)" stroke="var(--accent)" strokeWidth={2} type="monotone" />
-                <Area dataKey="events" fill="transparent" stroke="#2f8f6f" strokeWidth={2} type="monotone" />
+                <Tooltip
+                  content={({ label, payload }) => (
+                    <div className="min-w-40 rounded-xl bg-background p-3 text-xs shadow-sm">
+                      <p className="mb-2 font-medium text-foreground">{formatShortDate(label)}</p>
+                      {payload?.map((item, index) => (
+                        <div className="flex items-center justify-between gap-4" key={`${String(item.dataKey)}-${index}`}>
+                          <span className="text-muted">
+                            {item.dataKey === 'events'
+                              ? t('admin.analytics.metrics.events')
+                              : t('admin.analytics.metrics.sessions')}
+                          </span>
+                          <span className="font-mono font-medium text-foreground">{item.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  cursor={false}
+                />
+                <Area activeDot={{ r: 5 }} connectNulls dataKey="sessions" dot={{ r: 3, strokeWidth: 2 }} fill="url(#analyticsSessionsGradient)" stroke="var(--accent)" strokeWidth={2.5} type="monotone" />
+                <Area activeDot={{ r: 5 }} connectNulls dataKey="events" dot={{ r: 3, strokeWidth: 2 }} fill="transparent" stroke="#2f8f6f" strokeWidth={2.5} type="monotone" />
               </AreaChart>
             </ResponsiveContainer>
           </Card.Content>

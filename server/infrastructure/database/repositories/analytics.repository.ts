@@ -1,6 +1,7 @@
 import type { NewAnalyticsEvent } from '~/server/infrastructure/database/schema/analytics-event.schema'
 import type { NewAnalyticsReplayChunk } from '~/server/infrastructure/database/schema/analytics-replay-chunk.schema'
 import type { AnalyticsSession, NewAnalyticsSession } from '~/server/infrastructure/database/schema/analytics-session.schema'
+import { formatInTimeZone, fromZonedTime } from 'date-fns-tz'
 import { and, asc, count, desc, eq, gte, ilike, lte, or, sql } from 'drizzle-orm'
 import { db } from '~/server/infrastructure/database'
 import { analyticsEvents } from '~/server/infrastructure/database/schema/analytics-event.schema'
@@ -41,6 +42,13 @@ function normalizeSettings(settings: typeof analyticsSettings.$inferSelect) {
 function compactWhere(parts: Array<ReturnType<typeof eq> | undefined>) {
   const active = parts.filter(Boolean)
   return active.length ? and(...active) : undefined
+}
+
+const DAY_IN_MS = 24 * 60 * 60 * 1000
+const ADMIN_TIME_ZONE = 'Asia/Shanghai'
+
+function getLocalDateKey(date: Date) {
+  return formatInTimeZone(date, ADMIN_TIME_ZONE, 'yyyy-MM-dd')
 }
 
 /**
@@ -288,21 +296,26 @@ export class AnalyticsRepository {
    * Return dashboard metrics for admin analytics.
    */
   async getOverview(): Promise<AnalyticsOverview> {
-    const [sessionCount, eventCount, replayCount, countryCount, trend, topCountries, topPages] = await Promise.all([
+    const todayDate = getLocalDateKey(new Date())
+    const startDateKey = getLocalDateKey(new Date(fromZonedTime(`${todayDate}T00:00:00`, ADMIN_TIME_ZONE).getTime() - 13 * DAY_IN_MS))
+    const startDate = fromZonedTime(`${startDateKey}T00:00:00`, ADMIN_TIME_ZONE)
+    const sessionTrendDate = sql<string>`to_char(${analyticsSessions.createdAt} at time zone 'Asia/Shanghai', 'YYYY-MM-DD')`
+
+    const [sessionCount, eventCount, replayCount, countryCount, trendRows, topCountries, topPages] = await Promise.all([
       db.select({ value: count() }).from(analyticsSessions),
       db.select({ value: count() }).from(analyticsEvents),
       db.select({ value: count() }).from(analyticsSessions).where(eq(analyticsSessions.hasReplay, true)),
       db.select({ value: sql<number>`count(distinct ${analyticsSessions.country})::int` }).from(analyticsSessions),
       db
         .select({
-          date: sql<string>`to_char(date_trunc('day', ${analyticsSessions.createdAt}), 'YYYY-MM-DD')`,
+          date: sessionTrendDate,
           sessions: count(analyticsSessions.id),
           events: sql<number>`coalesce(sum(${analyticsSessions.eventCount}), 0)::int`,
         })
         .from(analyticsSessions)
-        .where(gte(analyticsSessions.createdAt, sql`now() - interval '14 days'`))
-        .groupBy(sql`date_trunc('day', ${analyticsSessions.createdAt})`)
-        .orderBy(sql`date_trunc('day', ${analyticsSessions.createdAt})`),
+        .where(gte(analyticsSessions.createdAt, startDate))
+        .groupBy(sessionTrendDate)
+        .orderBy(sessionTrendDate),
       db
         .select({
           country: sql<string>`coalesce(${analyticsSessions.country}, 'Unknown')`,
@@ -324,6 +337,21 @@ export class AnalyticsRepository {
         .limit(8),
     ])
 
+    const trendByDate = new Map(trendRows.map(row => [row.date, {
+      sessions: Number(row.sessions ?? 0),
+      events: Number(row.events ?? 0),
+    }]))
+    const sessionTrend = Array.from({ length: 14 }).map((_, index) => {
+      const date = getLocalDateKey(new Date(startDate.getTime() + index * DAY_IN_MS))
+      const row = trendByDate.get(date)
+
+      return {
+        date,
+        sessions: row?.sessions ?? 0,
+        events: row?.events ?? 0,
+      }
+    })
+
     return {
       metrics: {
         sessions: sessionCount[0]?.value ?? 0,
@@ -331,7 +359,7 @@ export class AnalyticsRepository {
         replaySessions: replayCount[0]?.value ?? 0,
         countries: countryCount[0]?.value ?? 0,
       },
-      sessionTrend: trend,
+      sessionTrend,
       topCountries,
       topPages,
     }

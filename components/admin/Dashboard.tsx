@@ -53,7 +53,8 @@ function formatShortDate(value: unknown, locale: string) {
   if (typeof value !== 'string')
     return ''
 
-  const date = new Date(`${value}T00:00:00Z`)
+  const [year, month, day] = value.split('-').map(Number)
+  const date = year && month && day ? new Date(year, month - 1, day) : new Date(value)
 
   if (Number.isNaN(date.getTime()))
     return value
@@ -210,8 +211,8 @@ export function Dashboard({ data }: DashboardProps) {
                   )}
                   cursor={false}
                 />
-                <Area dataKey="inquiries" fill="url(#inquiryGradient)" stroke="var(--accent)" strokeWidth={2} type="monotone" />
-                <Area dataKey="sensitiveHits" fill="transparent" stroke="#c84d36" strokeWidth={2} type="monotone" />
+                <Area activeDot={{ r: 5 }} connectNulls dataKey="inquiries" dot={{ r: 3, strokeWidth: 2 }} fill="url(#inquiryGradient)" stroke="var(--accent)" strokeWidth={2.5} type="monotone" />
+                <Area activeDot={{ r: 5 }} connectNulls dataKey="sensitiveHits" dot={{ r: 3, strokeWidth: 2 }} fill="transparent" stroke="#c84d36" strokeWidth={2.5} type="monotone" />
               </AreaChart>
             </ResponsiveContainer>
           </Card.Content>
