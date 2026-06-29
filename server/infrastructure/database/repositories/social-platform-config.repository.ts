@@ -70,6 +70,22 @@ export class SocialPlatformConfigRepository {
   }
 
   /**
+   * Find active settings for one platform.
+   */
+  async findActiveByPlatform(platform: string): Promise<SocialPlatformConfig | null> {
+    const result = await db
+      .select()
+      .from(socialPlatformConfigs)
+      .where(and(
+        eq(socialPlatformConfigs.platform, platform),
+        eq(socialPlatformConfigs.status, SocialPlatformConfigStatus.ACTIVE),
+      ))
+      .limit(1)
+
+    return result[0] ?? null
+  }
+
+  /**
    * Create platform settings.
    */
   async create(data: NewSocialPlatformConfig): Promise<SocialPlatformConfig> {

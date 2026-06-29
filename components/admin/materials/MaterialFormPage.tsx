@@ -106,6 +106,8 @@ export function MaterialFormPage({ mode, materialId }: MaterialFormPageProps) {
     mode: 'onChange',
     resolver: createZodI18nResolver(createMaterialSchema, t, fieldLabels),
   })
+  const { getValues, reset, setValue } = form
+  const loadFailedMessage = t('common.admin.materials.editor.loadFailed')
 
   useEffect(() => {
     let mounted = true
@@ -117,8 +119,8 @@ export function MaterialFormPage({ mode, materialId }: MaterialFormPageProps) {
       const items = (result.data ?? []) as MaterialCategoryOption[]
       setCategories(items)
 
-      if (mode === 'create' && items[0] && !form.getValues('category')) {
-        form.setValue('category', items[0].slug, {
+      if (mode === 'create' && items[0] && !getValues('category')) {
+        setValue('category', items[0].slug, {
           shouldDirty: false,
           shouldValidate: true,
         })
@@ -128,7 +130,7 @@ export function MaterialFormPage({ mode, materialId }: MaterialFormPageProps) {
     return () => {
       mounted = false
     }
-  }, [form, mode])
+  }, [getValues, mode, setValue])
 
   useEffect(() => {
     if (mode !== 'edit' || !materialId)
@@ -144,13 +146,13 @@ export function MaterialFormPage({ mode, materialId }: MaterialFormPageProps) {
           return
 
         if (result.code !== 0 || !result.data) {
-          setLoadError(result.message || t('common.admin.materials.editor.loadFailed'))
+          setLoadError(result.message || loadFailedMessage)
           return
         }
 
         const nextMaterial = result.data as MaterialFormRecord
         setMaterial(nextMaterial)
-        form.reset(mapMaterialToDefaults(nextMaterial))
+        reset(mapMaterialToDefaults(nextMaterial))
         setUploadPreview({
           coverUrl: nextMaterial.coverUrl ?? '',
           fileName: nextMaterial.fileName ?? '',
@@ -164,7 +166,7 @@ export function MaterialFormPage({ mode, materialId }: MaterialFormPageProps) {
     return () => {
       mounted = false
     }
-  }, [form, materialId, mode, t])
+  }, [loadFailedMessage, materialId, mode, reset])
 
   const watchedStatus = form.watch('status')
   const watchedCoverKey = form.watch('coverKey')
