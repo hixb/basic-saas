@@ -30,9 +30,10 @@ interface AnalyticsEventInput {
 const VISITOR_KEY = 'analytics_visitor_id'
 const EVENT_FLUSH_SIZE = 10
 const EVENT_FLUSH_INTERVAL = 5000
-const REPLAY_FLUSH_SIZE = 200
-const REPLAY_FLUSH_INTERVAL = 60000
+const REPLAY_FLUSH_SIZE = 80
+const REPLAY_FLUSH_INTERVAL = 10000
 const REPLAY_UPLOAD_TIMEOUT = 10000
+const BEACON_MAX_BYTES = 60_000
 const RRWEB_EVENT_TYPE_FULL_SNAPSHOT = 2
 
 function createId(prefix: string) {
@@ -141,7 +142,28 @@ function getElementSelector(target: EventTarget | null) {
   return `${tag}${id}${classes}`.slice(0, 500)
 }
 
-async function postJson<T>(url: string, body?: unknown, timeoutMs?: number): Promise<T | null> {
+function createJsonBlob(body: unknown) {
+  return new Blob([JSON.stringify(body)], { type: 'application/json' })
+}
+
+function postBeacon(url: string, body: unknown) {
+  if (!('sendBeacon' in navigator))
+    return false
+
+  const blob = createJsonBlob(body)
+
+  if (blob.size > BEACON_MAX_BYTES)
+    return false
+
+  return navigator.sendBeacon(url, blob)
+}
+
+async function postJson<T>(
+  url: string,
+  body?: unknown,
+  options: { keepalive?: boolean, timeoutMs?: number } = {},
+): Promise<T | null> {
+  const { keepalive = true, timeoutMs } = options
   const controller = timeoutMs ? new AbortController() : null
   const timeoutId = timeoutMs ? window.setTimeout(() => controller?.abort(), timeoutMs) : null
 
@@ -149,7 +171,7 @@ async function postJson<T>(url: string, body?: unknown, timeoutMs?: number): Pro
     const response = await fetch(url, {
       method: body == null ? 'GET' : 'POST',
       headers: body == null ? undefined : { 'Content-Type': 'application/json' },
-      keepalive: !timeoutMs,
+      keepalive,
       signal: controller?.signal,
       body: body == null ? undefined : JSON.stringify(body),
     })
@@ -182,6 +204,7 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
   const initializedRef = useRef(false)
   const enabledRef = useRef(false)
   const replayEnabledRef = useRef(false)
+  const sessionReadyRef = useRef(false)
   const sessionIdRef = useRef('')
   const visitorIdRef = useRef('')
   const startTimeRef = useRef(Date.now())
@@ -190,7 +213,9 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
   const replayIndexRef = useRef(0)
   const replayInitialSnapshotUploadedRef = useRef(false)
   const replayUploadingRef = useRef(false)
+  const replayPendingFlushRef = useRef(false)
   const replayUploadFailedRef = useRef(false)
+  const replayStoppedRef = useRef(false)
   const stopReplayRef = useRef<(() => void) | undefined>(undefined)
 
   function enqueueEvent(event: Omit<AnalyticsEventInput, 'eventId' | 'occurredAt'>) {
@@ -207,11 +232,20 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
       void flushEvents()
   }
 
-  async function flushEvents() {
-    if (!enabledRef.current || !eventQueueRef.current.length)
+  async function flushEvents(useBeacon = false) {
+    if (!enabledRef.current || !sessionReadyRef.current || !eventQueueRef.current.length)
       return
 
     const events = eventQueueRef.current.splice(0, EVENT_FLUSH_SIZE)
+    const body = {
+      sessionId: sessionIdRef.current,
+      visitorId: visitorIdRef.current,
+      events,
+    }
+
+    if (useBeacon && postBeacon('/api/analytics/events', body))
+      return
+
     const result = await postJson('/api/analytics/events', {
       sessionId: sessionIdRef.current,
       visitorId: visitorIdRef.current,
@@ -222,11 +256,10 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
       eventQueueRef.current.unshift(...events)
   }
 
-  async function flushReplay(force = false) {
+  async function flushReplay(force = false, useBeacon = false) {
     if (
       !replayEnabledRef.current
       || replayUploadFailedRef.current
-      || replayUploadingRef.current
       || !replayQueueRef.current.length
     ) {
       return
@@ -235,11 +268,39 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
     if (!force && replayQueueRef.current.length < REPLAY_FLUSH_SIZE)
       return
 
+    if (!sessionReadyRef.current) {
+      replayPendingFlushRef.current = true
+      return
+    }
+
+    if (replayUploadingRef.current) {
+      replayPendingFlushRef.current = true
+      return
+    }
+
     replayUploadingRef.current = true
     const events = replayQueueRef.current.splice(0, REPLAY_FLUSH_SIZE)
     const chunkIndex = replayIndexRef.current
     replayIndexRef.current += 1
     const payload = JSON.stringify(events)
+
+    if (useBeacon) {
+      const beaconBody = {
+        sessionId: sessionIdRef.current,
+        chunkIndex,
+        contentType: 'application/json',
+        payload,
+        eventCount: events.length,
+        startTime: events[0] ? new Date(events[0].timestamp).toISOString() : null,
+        endTime: events.at(-1) ? new Date(events.at(-1)!.timestamp).toISOString() : null,
+      }
+
+      if (postBeacon('/api/analytics/replay/upload', beaconBody)) {
+        replayUploadingRef.current = false
+        return
+      }
+    }
+
     const checksum = await sha256(payload)
 
     try {
@@ -252,24 +313,77 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
         checksum,
         startTime: events[0] ? new Date(events[0].timestamp).toISOString() : null,
         endTime: events.at(-1) ? new Date(events.at(-1)!.timestamp).toISOString() : null,
-      }, REPLAY_UPLOAD_TIMEOUT)
+      }, { keepalive: false, timeoutMs: REPLAY_UPLOAD_TIMEOUT })
 
       if (!uploaded) {
         replayUploadFailedRef.current = true
         replayEnabledRef.current = false
         replayQueueRef.current = []
-        stopReplayRef.current?.()
+        stopReplay()
       }
     }
     catch {
       replayUploadFailedRef.current = true
       replayEnabledRef.current = false
-      stopReplayRef.current?.()
+      stopReplay()
       replayQueueRef.current = []
     }
     finally {
       replayUploadingRef.current = false
+
+      if (replayPendingFlushRef.current && replayQueueRef.current.length) {
+        replayPendingFlushRef.current = false
+        void flushReplay(force, useBeacon)
+      }
     }
+  }
+
+  function startReplay(settings: AnalyticsSettings) {
+    if (!replayEnabledRef.current || replayStoppedRef.current || stopReplayRef.current)
+      return
+
+    stopReplayRef.current = record({
+      emit(event) {
+        replayQueueRef.current.push(event)
+        if (!replayInitialSnapshotUploadedRef.current && event.type === RRWEB_EVENT_TYPE_FULL_SNAPSHOT) {
+          replayInitialSnapshotUploadedRef.current = true
+          void flushReplay(true)
+          return
+        }
+
+        if (replayQueueRef.current.length >= REPLAY_FLUSH_SIZE)
+          void flushReplay()
+      },
+      maskAllInputs: true,
+      blockClass: 'analytics-block',
+      ignoreClass: 'analytics-ignore',
+      maskTextClass: 'analytics-mask',
+      blockSelector: settings.blockSelectors.join(','),
+      maskTextSelector: settings.maskTextSelectors.join(','),
+    })
+  }
+
+  function stopReplay() {
+    if (replayStoppedRef.current)
+      return
+
+    replayStoppedRef.current = true
+    stopReplayRef.current?.()
+    stopReplayRef.current = undefined
+  }
+
+  function finishSession() {
+    stopReplay()
+    void flushEvents(true)
+    void flushReplay(true, true)
+    const body = {
+      sessionId: sessionIdRef.current,
+      durationMs: Date.now() - startTimeRef.current,
+      exitPath: `${window.location.pathname}${window.location.search}`,
+    }
+
+    if (!postBeacon('/api/analytics/sessions/finish', body))
+      void postJson('/api/analytics/sessions/finish', body)
   }
 
   useEffect(() => {
@@ -290,9 +404,11 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
       enabledRef.current = true
       replayEnabledRef.current = settings.replayEnabled
 
+      startReplay(settings)
+
       const userAgent = navigator.userAgent
 
-      await postJson('/api/analytics/sessions', {
+      const session = await postJson('/api/analytics/sessions', {
         sessionId: sessionIdRef.current,
         visitorId: visitorIdRef.current,
         entryPath: path,
@@ -310,6 +426,17 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
         },
       })
 
+      if (!session) {
+        enabledRef.current = false
+        replayEnabledRef.current = false
+        replayQueueRef.current = []
+        eventQueueRef.current = []
+        stopReplay()
+        return
+      }
+
+      sessionReadyRef.current = true
+
       enqueueEvent({
         type: 'pageview',
         name: 'Page view',
@@ -317,27 +444,8 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
         title: document.title,
       })
 
-      if (replayEnabledRef.current) {
-        stopReplayRef.current = record({
-          emit(event) {
-            replayQueueRef.current.push(event)
-            if (!replayInitialSnapshotUploadedRef.current && event.type === RRWEB_EVENT_TYPE_FULL_SNAPSHOT) {
-              replayInitialSnapshotUploadedRef.current = true
-              void flushReplay(true)
-              return
-            }
-
-            if (replayQueueRef.current.length >= REPLAY_FLUSH_SIZE)
-              void flushReplay()
-          },
-          maskAllInputs: true,
-          blockClass: 'analytics-block',
-          ignoreClass: 'analytics-ignore',
-          maskTextClass: 'analytics-mask',
-          blockSelector: settings.blockSelectors.join(','),
-          maskTextSelector: settings.maskTextSelectors.join(','),
-        })
-      }
+      void flushEvents()
+      void flushReplay(true)
     }
 
     void initialize()
@@ -382,19 +490,18 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
       })
     }
 
-    const finishSession = () => {
-      void flushEvents()
-      void flushReplay(true)
-      void postJson('/api/analytics/sessions/finish', {
-        sessionId: sessionIdRef.current,
-        durationMs: Date.now() - startTimeRef.current,
-        exitPath: `${window.location.pathname}${window.location.search}`,
-      })
+    const handleVisibilityChange = () => {
+      if (document.visibilityState !== 'hidden')
+        return
+
+      void flushEvents(true)
+      void flushReplay(true, true)
     }
 
     window.addEventListener('click', handleClick, { capture: true })
     window.addEventListener('error', handleError)
     window.addEventListener('unhandledrejection', handleRejection)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
     window.addEventListener('pagehide', finishSession)
 
     return () => {
@@ -403,8 +510,9 @@ export function AnalyticsProvider({ children }: { children: ReactNode }) {
       window.removeEventListener('click', handleClick, { capture: true })
       window.removeEventListener('error', handleError)
       window.removeEventListener('unhandledrejection', handleRejection)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
       window.removeEventListener('pagehide', finishSession)
-      stopReplayRef.current?.()
+      stopReplay()
     }
   }, [])
 

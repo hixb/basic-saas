@@ -1,6 +1,7 @@
 'use client'
 
 import type { RecentPage } from '~/hooks/useRecentPages'
+import type { AllTranslationKeys } from '~/types/translation-keys'
 import { Button, InputGroup, ScrollShadow, Separator, Tooltip } from '@heroui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Pin, PinOff, Search, X } from 'lucide-react'
@@ -12,32 +13,35 @@ import { useTypedTranslations } from '~/hooks/useTypedTranslations'
 import { usePathname, useRouter } from '~/lib/i18n/navigation'
 import { cn } from '~/lib/utils/tools'
 
-/** Maps admin route paths to their sidebar menu labels. */
-const ADMIN_NAV_LABELS: Record<string, string> = {
-  '/admin/dashboard': 'common.admin.nav.dashboard',
-  '/admin/users': 'common.admin.nav.users',
-  '/admin/materials': 'common.admin.nav.materials',
-  '/admin/inquiries': 'common.admin.nav.inquiries',
-  '/admin/sensitive-words': 'common.admin.nav.sensitiveWords',
-  '/admin/settings': 'common.admin.nav.settings',
+interface AdminRouteLabelRule {
+  labelKey: AllTranslationKeys
+  matches: (pathname: string) => boolean
 }
 
-/** Returns the nav label for the given pathname, with prefix fallback for sub-routes. */
-function getNavLabel(pathname: string): string {
-  if (ADMIN_NAV_LABELS[pathname])
-    return ADMIN_NAV_LABELS[pathname]
+function exact(path: string) {
+  return (pathname: string) => pathname === path
+}
 
-  let bestLabel = ''
-  let bestLength = 0
+function section(path: string) {
+  return (pathname: string) => pathname === path || pathname.startsWith(`${path}/`)
+}
 
-  for (const [href, label] of Object.entries(ADMIN_NAV_LABELS)) {
-    if (pathname.startsWith(`${href}/`) && href.length > bestLength) {
-      bestLabel = label
-      bestLength = href.length
-    }
-  }
+const ADMIN_ROUTE_LABEL_RULES: AdminRouteLabelRule[] = [
+  { matches: exact('/admin/materials/add'), labelKey: 'common.admin.materials.editor.createPageTitle' },
+  { matches: pathname => /^\/admin\/materials\/[^/]+$/.test(pathname), labelKey: 'common.admin.materials.editor.editPageTitle' },
+  { matches: section('/admin/dashboard'), labelKey: 'common.admin.nav.dashboard' },
+  { matches: section('/admin/analytics'), labelKey: 'common.admin.nav.analytics' },
+  { matches: section('/admin/users'), labelKey: 'common.admin.nav.users' },
+  { matches: section('/admin/materials'), labelKey: 'common.admin.nav.materials' },
+  { matches: section('/admin/material-categories'), labelKey: 'common.admin.nav.materialCategories' },
+  { matches: section('/admin/social-platforms'), labelKey: 'common.admin.nav.socialPlatforms' },
+  { matches: section('/admin/inquiries'), labelKey: 'common.admin.nav.inquiries' },
+  { matches: section('/admin/sensitive-words'), labelKey: 'common.admin.nav.sensitiveWords' },
+  { matches: section('/admin/settings'), labelKey: 'common.admin.nav.settings' },
+]
 
-  return bestLabel
+function getNavLabelKey(pathname: string): AllTranslationKeys | null {
+  return ADMIN_ROUTE_LABEL_RULES.find(rule => rule.matches(pathname))?.labelKey ?? null
 }
 
 interface HistoryItemProps {
@@ -51,6 +55,12 @@ function HistoryItem({ page, isCurrent, onTogglePin, onRemove }: HistoryItemProp
   const router = useRouter()
   const t = useTypedTranslations()
   const [hovered, setHovered] = useState(false)
+  const labelKey = getNavLabelKey(page.href)
+
+  if (!labelKey)
+    return null
+
+  const label = t(labelKey)
 
   return (
     <Button
@@ -68,7 +78,7 @@ function HistoryItem({ page, isCurrent, onTogglePin, onRemove }: HistoryItemProp
     >
       {page.pinned && <Pin className="size-2.5 shrink-0 text-accent/70" />}
 
-      <span className="max-w-32 truncate">{page.label}</span>
+      <span className="max-w-32 truncate">{label}</span>
 
       <AnimatePresence>
         {hovered && (
@@ -127,12 +137,12 @@ function HistoryItem({ page, isCurrent, onTogglePin, onRemove }: HistoryItemProp
 export function AdminTopbar() {
   const t = useTypedTranslations()
   const pathname = usePathname()
-  const labelKey = getNavLabel(pathname)
-  const label = labelKey ? t(labelKey as any) : ''
-  const { pages, togglePin, remove } = useRecentPages(pathname, label)
+  const labelKey = getNavLabelKey(pathname)
+  const { pages, togglePin, remove } = useRecentPages(pathname, Boolean(labelKey))
 
-  const pinnedPages = pages.filter(p => p.pinned)
-  const recentPages = pages.filter(p => !p.pinned)
+  const visiblePages = pages.filter(page => getNavLabelKey(page.href))
+  const pinnedPages = visiblePages.filter(p => p.pinned)
+  const recentPages = visiblePages.filter(p => !p.pinned)
   const showSeparator = pinnedPages.length > 0 && recentPages.length > 0
 
   const [searchOpen, setSearchOpen] = useState(false)
@@ -208,7 +218,7 @@ export function AdminTopbar() {
           </div>
 
           {[...pinnedPages, ...recentPages].length
-            ? <Separator className="mx-0.5 h-4" orientation="vertical" />
+            ? <Separator className="mx-0.5 h-4 my-auto" orientation="vertical" />
             : null}
 
           {pinnedPages.map(page => (
@@ -221,7 +231,7 @@ export function AdminTopbar() {
             />
           ))}
 
-          {showSeparator && <Separator className="mx-0.5 h-4" orientation="vertical" />}
+          {showSeparator && <Separator className="mx-0.5 h-4 my-auto" orientation="vertical" />}
 
           {recentPages.map(page => (
             <HistoryItem

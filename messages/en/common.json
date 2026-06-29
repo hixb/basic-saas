@@ -177,6 +177,7 @@
       "users": "Users",
       "materials": "Materials",
       "materialCategories": "Material Categories",
+      "socialPlatforms": "Social Platforms",
       "inquiries": "Inquiries",
       "sensitiveWords": "Sensitive Words",
       "personalCenter": "Personal Center",
@@ -205,6 +206,10 @@
       "materialCategories": {
         "title": "Material Categories",
         "description": "Manage the category options available when creating content materials."
+      },
+      "socialPlatforms": {
+        "title": "Social Platforms",
+        "description": "Configure OAuth, API, publishing, and upload settings for social platform integrations."
       },
       "inquiries": {
         "title": "Customer Inquiries",
@@ -403,6 +408,18 @@
       "actions": {
         "create": "New material"
       },
+      "publish": {
+        "action": "Publish to platforms",
+        "title": "Publish material",
+        "description": "This material is suitable for: {platforms}. Confirm publishing to these connected platforms?",
+        "youtubeSkipped": "YouTube is skipped because this material does not have a video attachment.",
+        "confirm": "Publish",
+        "success": "Publish request completed",
+        "failed": "Publish request failed",
+        "partial": "{failed} of {total} platform publishes failed.",
+        "noAccounts": "No connected social accounts were found.",
+        "noPlatformConfigs": "No social platform configuration has been enabled."
+      },
       "columns": {
         "title": "Title",
         "summary": "Summary",
@@ -463,6 +480,38 @@
         "title": "Title is required",
         "summary": "Summary is required",
         "content": "Content is required"
+      }
+    },
+    "socialPlatforms": {
+      "actions": {
+        "create": "New platform"
+      },
+      "columns": {
+        "platform": "Platform",
+        "displayName": "Display Name",
+        "apiBaseUrl": "API Base URL",
+        "status": "Status",
+        "createdAt": "Created At"
+      },
+      "platforms": {
+        "facebook": "Facebook",
+        "youtube": "YouTube",
+        "tiktok": "TikTok"
+      },
+      "form": {
+        "createTitle": "New Social Platform",
+        "editTitle": "Edit Social Platform",
+        "platform": "Platform",
+        "displayName": "Display name",
+        "clientId": "Client ID",
+        "clientSecret": "Client secret",
+        "authUrl": "OAuth authorization URL",
+        "tokenUrl": "OAuth token URL",
+        "apiBaseUrl": "API base URL",
+        "publishEndpoint": "Publish endpoint",
+        "uploadEndpoint": "Upload endpoint",
+        "scopes": "OAuth scopes",
+        "status": "Status"
       }
     },
     "users": {

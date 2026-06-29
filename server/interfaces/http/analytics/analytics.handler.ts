@@ -29,6 +29,14 @@ interface NormalizedReplayEvent extends ReplayEventLike {
   timestamp: number
 }
 
+interface ReplayChunkReadResult {
+  events: unknown[]
+  error?: {
+    chunkIndex: number
+    message: string
+  }
+}
+
 function parseOptionalDate(value: string | null) {
   if (!value)
     return undefined
@@ -49,7 +57,11 @@ function isReplayEvent(value: unknown): value is NormalizedReplayEvent {
     && typeof (value as ReplayEventLike).timestamp === 'number'
 }
 
-function buildReplayDiagnostics(events: ReplayEventLike[], chunks: number) {
+function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : String(error)
+}
+
+function buildReplayDiagnostics(events: ReplayEventLike[], chunks: number, failedChunks: ReplayChunkReadResult['error'][]) {
   const typeCounts = events.reduce<Record<string, number>>((acc, event) => {
     const type = String(event.type)
     acc[type] = (acc[type] ?? 0) + 1
@@ -62,6 +74,8 @@ function buildReplayDiagnostics(events: ReplayEventLike[], chunks: number) {
 
   return {
     chunks,
+    failedChunks,
+    failedChunkCount: failedChunks.length,
     eventCount: events.length,
     typeCounts,
     hasMeta: Boolean(meta),
@@ -73,6 +87,26 @@ function buildReplayDiagnostics(events: ReplayEventLike[], chunks: number) {
     fullSnapshotNodeType: typeof fullSnapshot?.data === 'object' && fullSnapshot.data !== null && 'node' in fullSnapshot.data
       ? (fullSnapshot.data as { node?: { type?: unknown } }).node?.type ?? null
       : null,
+  }
+}
+
+async function readReplayChunk(chunk: { chunkIndex: number, r2Key: string }): Promise<ReplayChunkReadResult> {
+  try {
+    const text = await storage.getObjectText(chunk.r2Key)
+    const parsed = JSON.parse(text) as unknown
+
+    return {
+      events: Array.isArray(parsed) ? parsed : [],
+    }
+  }
+  catch (error) {
+    return {
+      events: [],
+      error: {
+        chunkIndex: chunk.chunkIndex,
+        message: getErrorMessage(error),
+      },
+    }
   }
 }
 
@@ -371,20 +405,11 @@ export async function handleGetAdminAnalyticsReplayEvents(sessionId: string) {
     return notFound('Analytics session not found')
 
   const chunks = await analyticsRepository.findReplayChunksBySessionId(sessionId)
-  const payloads = await Promise.all(chunks.map(async (chunk) => {
-    const text = await storage.getObjectText(chunk.r2Key)
-
-    try {
-      const parsed = JSON.parse(text) as unknown
-      return Array.isArray(parsed) ? parsed : []
-    }
-    catch {
-      return []
-    }
-  }))
+  const payloads = await Promise.all(chunks.map(readReplayChunk))
+  const failedChunks = payloads.map(payload => payload.error).filter(error => error != null)
 
   const events = payloads
-    .flat()
+    .flatMap(payload => payload.events)
     .filter(isReplayEvent)
     .sort((a, b) => a.timestamp - b.timestamp)
 
@@ -392,7 +417,7 @@ export async function handleGetAdminAnalyticsReplayEvents(sessionId: string) {
     sessionId,
     events,
     chunks: chunks.length,
-    diagnostics: buildReplayDiagnostics(events, chunks.length),
+    diagnostics: buildReplayDiagnostics(events, chunks.length, failedChunks),
   })
 }
 

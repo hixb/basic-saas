@@ -1,13 +1,14 @@
 'use client'
 
 import type { ColumnDef, CrudOperations } from '~/components/crud'
-import { Button, Chip } from '@heroui/react'
-import { Pencil } from 'lucide-react'
+import { Button, Chip, toast, Tooltip } from '@heroui/react'
+import { Pencil, Send } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { AdminApi } from '~/apis/admin'
 import { CrudTable } from '~/components/crud'
 import { CopyText } from '~/components/feedback/CopyText'
+import { Popup } from '~/context/usePopupContext'
 import { useCrudTable } from '~/hooks/useCrudTable'
 import { useTypedTranslations } from '~/hooks/useTypedTranslations'
 
@@ -51,6 +52,15 @@ const operations: CrudOperations<MaterialRow> = {
   delete: id => AdminApi.materials.delete(Number(id)),
 }
 
+function getSuitablePlatforms(row: MaterialRow) {
+  const platforms: Array<'facebook' | 'youtube'> = ['facebook']
+
+  if (row.fileKey && row.fileContentType?.startsWith('video/'))
+    platforms.push('youtube')
+
+  return platforms
+}
+
 export function MaterialsTable() {
   const t = useTypedTranslations()
   const router = useRouter()
@@ -78,6 +88,56 @@ export function MaterialsTable() {
     window.location.href = AdminApi.materials.exportUrl({
       keyword: handle.keyword,
       dir: handle.sort?.direction,
+    })
+  }
+
+  const handlePublish = async (row: MaterialRow) => {
+    const activePlatforms = await AdminApi.socialPlatforms.active()
+
+    if (activePlatforms.code !== 0 || !activePlatforms.data?.length) {
+      toast.warning(t('common.admin.materials.publish.noPlatformConfigs'))
+      return
+    }
+
+    const platforms = getSuitablePlatforms(row)
+    const platformLabel = platforms.map(platform => platform === 'facebook' ? 'Facebook' : 'YouTube').join(', ')
+
+    Popup.ActionDialog.visible({
+      title: t('common.admin.materials.publish.title'),
+      content: (
+        <div className="grid gap-2 text-sm">
+          <p>{t('common.admin.materials.publish.description', { platforms: platformLabel })}</p>
+          {!platforms.includes('youtube') && (
+            <p className="text-muted">{t('common.admin.materials.publish.youtubeSkipped')}</p>
+          )}
+        </div>
+      ),
+      status: 'default',
+      confirmText: t('common.admin.materials.publish.confirm'),
+      cancelText: t('common.admin.crud.cancel'),
+      onConfirm: async () => {
+        const result = await AdminApi.materials.publish({ postId: row.id, platforms })
+
+        if (result.code !== 0) {
+          toast.danger(result.message || t('common.admin.materials.publish.failed'))
+          return
+        }
+
+        const results = result.data?.results ?? []
+        if (results.length === 0) {
+          toast.warning(t('common.admin.materials.publish.noAccounts'))
+          return
+        }
+
+        const failedCount = results.filter(item => item.status === 'failed').length
+
+        if (failedCount > 0) {
+          toast.warning(t('common.admin.materials.publish.partial', { failed: failedCount, total: results.length }))
+          return
+        }
+
+        toast.success(t('common.admin.materials.publish.success'))
+      },
     })
   }
 
@@ -145,10 +205,26 @@ export function MaterialsTable() {
           selectAll: t('common.admin.crud.selectAll'),
           selectRow: t('common.admin.crud.selectRow'),
         }}
-        renderActions={({ rowId }) => (
-          <Button isIconOnly onPress={() => router.push(`/admin/materials/${rowId}`)} size="sm" variant="tertiary">
-            <Pencil size={14} />
-          </Button>
+        renderActions={({ rowId, row }) => (
+          <div className="flex items-center gap-2">
+            <Tooltip delay={0}>
+              <Tooltip.Trigger>
+                <Button
+                  isDisabled={(row as MaterialRow).status !== 'published'}
+                  isIconOnly
+                  onPress={() => void handlePublish(row as MaterialRow)}
+                  size="sm"
+                  variant="tertiary"
+                >
+                  <Send size={14} />
+                </Button>
+              </Tooltip.Trigger>
+              <Tooltip.Content>{t('common.admin.materials.publish.action')}</Tooltip.Content>
+            </Tooltip>
+            <Button isIconOnly onPress={() => router.push(`/admin/materials/${rowId}`)} size="sm" variant="tertiary">
+              <Pencil size={14} />
+            </Button>
+          </div>
         )}
         renderDetail={(row) => {
           const material = row as MaterialRow

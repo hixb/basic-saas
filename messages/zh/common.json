@@ -177,6 +177,7 @@
       "users": "用户",
       "materials": "资料",
       "materialCategories": "资料分类",
+      "socialPlatforms": "社交平台",
       "inquiries": "用户事项",
       "sensitiveWords": "敏感词",
       "personalCenter": "个人中心",
@@ -205,6 +206,10 @@
       "materialCategories": {
         "title": "资料分类",
         "description": "管理创建内容资料时可选择的分类。"
+      },
+      "socialPlatforms": {
+        "title": "社交平台",
+        "description": "配置社交平台集成需要的 OAuth、API、发布和上传参数。"
       },
       "inquiries": {
         "title": "用户事项",
@@ -403,6 +408,18 @@
       "actions": {
         "create": "新建资料"
       },
+      "publish": {
+        "action": "转发到平台",
+        "title": "发布资料",
+        "description": "系统判断该资料适合发布到：{platforms}。确认发布到这些已连接平台吗？",
+        "youtubeSkipped": "由于该资料没有视频附件，本次不会发布到 YouTube。",
+        "confirm": "发布",
+        "success": "发布请求已完成",
+        "failed": "发布请求失败",
+        "partial": "{total} 个平台中有 {failed} 个发布失败。",
+        "noAccounts": "未找到已连接的社交平台账号。",
+        "noPlatformConfigs": "暂无已启用的社交平台配置。"
+      },
       "columns": {
         "title": "标题",
         "summary": "摘要",
@@ -463,6 +480,38 @@
         "title": "请填写标题",
         "summary": "请填写摘要",
         "content": "请填写正文"
+      }
+    },
+    "socialPlatforms": {
+      "actions": {
+        "create": "新建平台"
+      },
+      "columns": {
+        "platform": "平台",
+        "displayName": "显示名称",
+        "apiBaseUrl": "API 基础地址",
+        "status": "状态",
+        "createdAt": "创建时间"
+      },
+      "platforms": {
+        "facebook": "Facebook",
+        "youtube": "YouTube",
+        "tiktok": "TikTok"
+      },
+      "form": {
+        "createTitle": "新建社交平台",
+        "editTitle": "编辑社交平台",
+        "platform": "平台",
+        "displayName": "显示名称",
+        "clientId": "Client ID",
+        "clientSecret": "Client Secret",
+        "authUrl": "OAuth 授权地址",
+        "tokenUrl": "OAuth Token 地址",
+        "apiBaseUrl": "API 基础地址",
+        "publishEndpoint": "发布接口",
+        "uploadEndpoint": "上传接口",
+        "scopes": "OAuth scopes",
+        "status": "状态"
       }
     },
     "users": {

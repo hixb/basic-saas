@@ -1,5 +1,7 @@
 import type { LoginInput, LoginResponse } from '~/shared/schemas/auth.schema'
 import type { CreateInquiryInput, CreateMaterialInput, MaterialCategoryInput, SensitiveWordInput } from '~/shared/schemas/content.schema'
+import type { PublishRequestInput } from '~/shared/schemas/publish.schema'
+import type { SocialPlatformConfigInput } from '~/shared/schemas/social-platform.schema'
 import type { ApiResponse, PaginatedResponse } from '~/shared/types/api.type'
 import { requester } from '~/utils/requester'
 
@@ -37,6 +39,8 @@ export interface AnalyticsReplayUrl {
 
 export interface AnalyticsReplayDiagnostics {
   chunks: number
+  failedChunks: Array<{ chunkIndex: number, message: string }>
+  failedChunkCount: number
   eventCount: number
   typeCounts: Record<string, number>
   hasMeta: boolean
@@ -46,6 +50,24 @@ export interface AnalyticsReplayDiagnostics {
   firstTypes: unknown[]
   meta: unknown
   fullSnapshotNodeType: unknown
+}
+
+export interface PublishResult {
+  platform: 'facebook' | 'youtube'
+  accountId: number
+  status: 'published' | 'skipped' | 'failed'
+  message: string
+  remoteId?: string
+  detail?: unknown
+}
+
+export interface PublishResponse {
+  results: PublishResult[]
+  suitability: Array<{
+    platform: string
+    suitable: boolean
+    reason: string
+  }>
 }
 
 export const AdminApi = {
@@ -68,6 +90,7 @@ export const AdminApi = {
     create: (data: CreateMaterialInput) => client.post('/api/admin/materials', data),
     update: (id: number, data: Partial<CreateMaterialInput>) => client.put(`/api/admin/materials/${id}`, data),
     delete: (id: number) => client.del(`/api/admin/materials/${id}`),
+    publish: (data: PublishRequestInput) => client.post<PublishResponse>('/api/admin/publish', data),
     exportUrl: (query: Record<string, unknown>) => {
       const searchParams = new URLSearchParams()
       for (const [key, value] of Object.entries(query)) {
@@ -91,6 +114,13 @@ export const AdminApi = {
     create: (data: MaterialCategoryInput) => client.post('/api/admin/material-categories', data),
     update: (id: number, data: Partial<MaterialCategoryInput>) => client.put(`/api/admin/material-categories/${id}`, data),
     delete: (id: number) => client.del(`/api/admin/material-categories/${id}`),
+  },
+  socialPlatforms: {
+    list: (query: Record<string, unknown>) => client.get<any[]>('/api/admin/social-platforms', query) as Promise<PaginatedResponse<any>>,
+    active: () => client.get<any[]>('/api/admin/social-platforms', { activeOnly: true }) as Promise<PaginatedResponse<any>>,
+    create: (data: SocialPlatformConfigInput) => client.post('/api/admin/social-platforms', data),
+    update: (id: number, data: Partial<SocialPlatformConfigInput>) => client.put(`/api/admin/social-platforms/${id}`, data),
+    delete: (id: number) => client.del(`/api/admin/social-platforms/${id}`),
   },
   sensitiveWords: {
     list: (query: Record<string, unknown>) => client.get<any[]>('/api/admin/sensitive-words', query) as Promise<PaginatedResponse<any>>,

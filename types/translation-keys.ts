@@ -129,6 +129,7 @@ export interface TranslationParamsMap {
     'admin.nav.users': void
     'admin.nav.materials': void
     'admin.nav.materialCategories': void
+    'admin.nav.socialPlatforms': void
     'admin.nav.inquiries': void
     'admin.nav.sensitiveWords': void
     'admin.nav.personalCenter': void
@@ -146,6 +147,8 @@ export interface TranslationParamsMap {
     'admin.pages.materials.description': void
     'admin.pages.materialCategories.title': void
     'admin.pages.materialCategories.description': void
+    'admin.pages.socialPlatforms.title': void
+    'admin.pages.socialPlatforms.description': void
     'admin.pages.inquiries.title': void
     'admin.pages.inquiries.description': void
     'admin.pages.sensitiveWords.title': void
@@ -285,6 +288,16 @@ export interface TranslationParamsMap {
     'admin.formErrors.unknown': void
     'admin.formErrors.fields.form': void
     'admin.materials.actions.create': void
+    'admin.materials.publish.action': void
+    'admin.materials.publish.title': void
+    'admin.materials.publish.description': { platforms: string | number | boolean | Date | null | undefined }
+    'admin.materials.publish.youtubeSkipped': void
+    'admin.materials.publish.confirm': void
+    'admin.materials.publish.success': void
+    'admin.materials.publish.failed': void
+    'admin.materials.publish.partial': { failed: string | number | boolean | Date | null | undefined, total: string | number | boolean | Date | null | undefined }
+    'admin.materials.publish.noAccounts': void
+    'admin.materials.publish.noPlatformConfigs': void
     'admin.materials.columns.title': void
     'admin.materials.columns.summary': void
     'admin.materials.columns.category': void
@@ -336,6 +349,28 @@ export interface TranslationParamsMap {
     'admin.materials.validation.title': void
     'admin.materials.validation.summary': void
     'admin.materials.validation.content': void
+    'admin.socialPlatforms.actions.create': void
+    'admin.socialPlatforms.columns.platform': void
+    'admin.socialPlatforms.columns.displayName': void
+    'admin.socialPlatforms.columns.apiBaseUrl': void
+    'admin.socialPlatforms.columns.status': void
+    'admin.socialPlatforms.columns.createdAt': void
+    'admin.socialPlatforms.platforms.facebook': void
+    'admin.socialPlatforms.platforms.youtube': void
+    'admin.socialPlatforms.platforms.tiktok': void
+    'admin.socialPlatforms.form.createTitle': void
+    'admin.socialPlatforms.form.editTitle': void
+    'admin.socialPlatforms.form.platform': void
+    'admin.socialPlatforms.form.displayName': void
+    'admin.socialPlatforms.form.clientId': void
+    'admin.socialPlatforms.form.clientSecret': void
+    'admin.socialPlatforms.form.authUrl': void
+    'admin.socialPlatforms.form.tokenUrl': void
+    'admin.socialPlatforms.form.apiBaseUrl': void
+    'admin.socialPlatforms.form.publishEndpoint': void
+    'admin.socialPlatforms.form.uploadEndpoint': void
+    'admin.socialPlatforms.form.scopes': void
+    'admin.socialPlatforms.form.status': void
     'admin.users.columns.username': void
     'admin.users.columns.nickname': void
     'admin.users.columns.email': void

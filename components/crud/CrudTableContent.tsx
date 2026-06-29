@@ -336,6 +336,7 @@ export function CrudTableContent<T>({
           )}
           {operations.delete && (
             <Button
+              className="min-w-8"
               isIconOnly
               onPress={() => handleDelete(rowId)}
               size="sm"

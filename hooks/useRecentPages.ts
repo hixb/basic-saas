@@ -7,13 +7,12 @@ const MAX_PAGES = 12
 
 export interface RecentPage {
   href: string
-  label: string
   pinned: boolean
 }
 
 type Action
   = { type: 'INIT', pages: RecentPage[] }
-    | { type: 'ADD_PAGE', href: string, label: string }
+    | { type: 'ADD_PAGE', href: string }
     | { type: 'TOGGLE_PIN', href: string }
     | { type: 'REMOVE', href: string }
 
@@ -24,14 +23,14 @@ function reducer(state: RecentPage[], action: Action): RecentPage[] {
     case 'ADD_PAGE': {
       const existing = state.find(p => p.href === action.href)
 
-      // Already pinned — preserve position and pinned status unchanged
+      // Already pinned: preserve position and pinned status unchanged.
       if (existing?.pinned)
         return state
 
       const filtered = state.filter(p => p.href !== action.href)
       const pinned = filtered.filter(p => p.pinned)
       const recent = [
-        { href: action.href, label: action.label, pinned: false },
+        { href: action.href, pinned: false },
         ...filtered.filter(p => !p.pinned),
       ]
 
@@ -48,7 +47,7 @@ function reducer(state: RecentPage[], action: Action): RecentPage[] {
       const pinned = filtered.filter(p => p.pinned)
       const recent = filtered.filter(p => !p.pinned)
 
-      // Newly pinned → end of pinned section; newly unpinned → front of recent
+      // Newly pinned: end of pinned section; newly unpinned: front of recent.
       return updated.pinned
         ? [...pinned, updated, ...recent]
         : [...pinned, updated, ...recent]
@@ -67,7 +66,22 @@ export interface UseRecentPagesReturn {
   remove: (href: string) => void
 }
 
-export function useRecentPages(currentHref: string, currentLabel?: string): UseRecentPagesReturn {
+function normalizePages(pages: RecentPage[]): RecentPage[] {
+  const seen = new Set<string>()
+
+  return pages
+    .filter((page) => {
+      if (!page.href || seen.has(page.href))
+        return false
+
+      seen.add(page.href)
+      return true
+    })
+    .map(page => ({ href: page.href, pinned: Boolean(page.pinned) }))
+    .slice(0, MAX_PAGES)
+}
+
+export function useRecentPages(currentHref: string, enabled = true): UseRecentPagesReturn {
   const [pages, dispatch] = useReducer(reducer, [])
 
   const saveRunCountRef = useRef(0)
@@ -76,8 +90,10 @@ export function useRecentPages(currentHref: string, currentLabel?: string): UseR
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]') as RecentPage[]
-      if (saved.length > 0)
-        dispatch({ type: 'INIT', pages: saved })
+      const pages = normalizePages(saved)
+
+      if (pages.length > 0)
+        dispatch({ type: 'INIT', pages })
     }
     catch {
       // ignore parse errors
@@ -85,13 +101,11 @@ export function useRecentPages(currentHref: string, currentLabel?: string): UseR
   }, [])
 
   useEffect(() => {
-    const label = currentLabel?.trim()
-
-    if (!label)
+    if (!enabled)
       return
 
-    dispatch({ type: 'ADD_PAGE', href: currentHref, label })
-  }, [currentHref, currentLabel])
+    dispatch({ type: 'ADD_PAGE', href: currentHref })
+  }, [currentHref, enabled])
 
   useEffect(() => {
     saveRunCountRef.current++

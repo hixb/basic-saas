@@ -13,6 +13,7 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  Share2,
   ShieldAlert,
   Tags,
   Users,
@@ -51,6 +52,7 @@ const NAV_ITEMS: NavItem[] = [
   { labelKey: 'admin.nav.users', icon: Users, href: '/admin/users' },
   { labelKey: 'admin.nav.materials', icon: FileText, href: '/admin/materials' },
   { labelKey: 'admin.nav.materialCategories', icon: Tags, href: '/admin/material-categories' },
+  { labelKey: 'admin.nav.socialPlatforms', icon: Share2, href: '/admin/social-platforms' },
   { labelKey: 'admin.nav.inquiries', icon: Inbox, href: '/admin/inquiries' },
   { labelKey: 'admin.nav.sensitiveWords', icon: ShieldAlert, href: '/admin/sensitive-words' },
 ]

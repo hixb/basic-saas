@@ -8,6 +8,7 @@ import { AlertDialog, Button, Spinner, toast } from '@heroui/react'
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTypedTranslations } from '~/hooks/useTypedTranslations'
+import { cn } from '~/lib/utils/tools'
 import { getAdminSubmitErrorMessage } from '~/utils/zod-form-resolver'
 import { useCrudTableCtx } from './context'
 
@@ -84,6 +85,7 @@ interface CrudTableFormModalProps<T, CreateInput, UpdateInput> {
   editSubmitLabel?: string
   fieldLabels?: Record<string, string>
   resolver?: Resolver<FieldValues & CreateInput & UpdateInput>
+  formClassName?: string
 }
 
 /**
@@ -127,6 +129,7 @@ export function CrudTableFormModal<T, CreateInput = unknown, UpdateInput = unkno
   fieldLabels = {},
   handle: _handle,
   resolver,
+  formClassName,
 }: CrudTableFormModalProps<T, CreateInput, UpdateInput>) {
   const { handle, registerFormModal } = useCrudTableCtx()
   const { formOpen, formMode, editingRow, closeForm, handleFormSubmit } = handle as CrudTableHandle<T, CreateInput, UpdateInput>
@@ -192,7 +195,7 @@ export function CrudTableFormModal<T, CreateInput = unknown, UpdateInput = unkno
             <AlertDialog.Heading>{title}</AlertDialog.Heading>
           </AlertDialog.Header>
           <AlertDialog.Body className="max-h-[calc(88dvh-9rem)] overflow-y-auto">
-            <form className="flex flex-col gap-4 p-1" id="crud-form" onSubmit={onSubmit}>
+            <form className={cn('flex flex-col gap-4 p-1', formClassName)} id="crud-form" onSubmit={onSubmit}>
               {typeof children === 'function'
                 ? children({ mode: formMode, data: editingRow, form })
                 : children}
