@@ -87,6 +87,16 @@ function formatDuration(ms: number) {
   return minutes ? `${minutes}m ${rest}s` : `${rest}s`
 }
 
+function getDisplayDuration(session: AnalyticsSession) {
+  const createdAt = new Date(session.createdAt).getTime()
+
+  if (Number.isNaN(createdAt))
+    return session.durationMs
+
+  const liveDuration = session.isFinished ? 0 : Date.now() - createdAt
+  return Math.max(session.durationMs, liveDuration)
+}
+
 function formatBytes(size: number) {
   if (size < 1024)
     return `${size} B`
@@ -516,7 +526,7 @@ export function AnalyticsDashboard({ overview }: { overview: AnalyticsOverviewRe
                       </div>
                       <div>
                         <p className="text-xs text-muted">{t('admin.analytics.trace.duration')}</p>
-                        <p className="mt-1">{formatDuration(detail.session.durationMs)}</p>
+                        <p className="mt-1">{formatDuration(getDisplayDuration(detail.session))}</p>
                       </div>
                       <div>
                         <p className="text-xs text-muted">{t('admin.analytics.trace.replaySize')}</p>

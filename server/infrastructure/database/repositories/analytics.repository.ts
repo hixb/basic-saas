@@ -86,6 +86,7 @@ export class AnalyticsRepository {
           emoji: data.emoji,
           metadata: data.metadata,
           replayEnabled: data.replayEnabled,
+          isFinished: false,
           updatedAt: new Date(),
         },
       })
@@ -125,16 +126,21 @@ export class AnalyticsRepository {
       existing.exitPath = nextPath ?? existing.exitPath
     }
 
-    await Promise.all(Array.from(grouped.entries()).map(([sessionId, item]) => db
-      .update(analyticsSessions)
-      .set({
-        eventCount: sql`${analyticsSessions.eventCount} + ${item.count}`,
-        firstEventAt: item.first,
-        lastEventAt: item.last,
-        exitPath: item.exitPath,
-        updatedAt: new Date(),
-      })
-      .where(eq(analyticsSessions.sessionId, sessionId))))
+    await Promise.all(Array.from(grouped.entries()).map(([sessionId, item]) => {
+      const lastOccurredAt = item.last.toISOString()
+
+      return db
+        .update(analyticsSessions)
+        .set({
+          eventCount: sql`${analyticsSessions.eventCount} + ${item.count}`,
+          firstEventAt: item.first,
+          lastEventAt: item.last,
+          durationMs: sql`greatest(${analyticsSessions.durationMs}, floor(extract(epoch from (${lastOccurredAt}::timestamptz - ${analyticsSessions.createdAt})) * 1000)::int)`,
+          exitPath: item.exitPath,
+          updatedAt: new Date(),
+        })
+        .where(eq(analyticsSessions.sessionId, sessionId))
+    }))
   }
 
   /**
@@ -186,7 +192,7 @@ export class AnalyticsRepository {
     await db
       .update(analyticsSessions)
       .set({
-        durationMs,
+        durationMs: sql`greatest(${analyticsSessions.durationMs}, ${durationMs})`,
         exitPath,
         isFinished: true,
         updatedAt: new Date(),

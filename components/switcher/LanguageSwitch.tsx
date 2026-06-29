@@ -17,7 +17,10 @@ export function LanguageSwitch() {
   const currentLocale = useLocale()
 
   const handleChange = useCallback((localeKey: string) => {
-    router.replace(pathname, { locale: localeKey })
+    const search = window.location.search
+    const hash = window.location.hash
+
+    router.replace(`${pathname}${search}${hash}`, { locale: localeKey })
   }, [router, pathname])
 
   return (
